@@ -21,7 +21,7 @@ const photo = (id: string, title: string, filename: string, alt: string, feature
   internalTitle: title,
   image: {
     asset: {
-      url: `https://aygrossphotography.com/wp-content/uploads/2023/04/${filename}`
+      url: `/images/photos/${filename}`
     }
   },
   alt,
@@ -155,7 +155,7 @@ export const aboutPage: AboutPageData = {
   title: 'About Me',
   portrait: {
     asset: {
-      url: 'https://aygrossphotography.com/wp-content/uploads/2023/04/EBA9BE3B-D978-4EF0-A42A-F21E63AE472B-1152x2048.jpg'
+      url: '/images/photos/EBA9BE3B-D978-4EF0-A42A-F21E63AE472B-1152x2048.jpg'
     }
   },
   portraitAlt: 'AY Gross holding a camera',
