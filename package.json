@@ -11,7 +11,8 @@
     "astro": "astro",
     "check": "astro check",
     "test:audit": "tsx scripts/audit-site-qa.ts",
-    "test": "tsx scripts/verify-migration.ts && tsx scripts/audit-site-qa.ts"
+    "test": "tsx scripts/verify-migration.ts && tsx scripts/audit-site-qa.ts",
+    "deploy": "tsx scripts/bunny-deploy.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",

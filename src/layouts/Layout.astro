@@ -44,14 +44,6 @@ const currentPath = Astro.url.pathname;
     <meta name="theme-color" content="#fcfbf9" id="theme-color-meta" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Performance: Preconnect to Google Fonts and load optimized font weights with display=swap -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Aleo:wght@400;600&family=Inter:wght@400;500;600&display=swap"
-    />
-
     <!-- Theme initialization script before CSS to eliminate flash -->
     <script is:inline>
       (function() {

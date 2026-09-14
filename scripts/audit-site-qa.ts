@@ -239,7 +239,12 @@ function runAudit() {
     'og-image.jpg',
     'logo.png',
     'apple-touch-icon.png',
-    'favicon.svg'
+    'favicon.svg',
+    'fonts/aleo-400.woff2',
+    'fonts/aleo-600.woff2',
+    'fonts/inter-400.woff2',
+    'fonts/inter-500.woff2',
+    'fonts/inter-600.woff2'
   ];
 
   for (const asset of criticalAssets) {

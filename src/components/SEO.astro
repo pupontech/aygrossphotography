@@ -171,6 +171,6 @@ if (schemaType === 'ImageGallery') {
 <meta name="twitter:image" content={finalImage} />
 <meta name="twitter:image:alt" content={finalTitle} />
 
-<!-- JSON-LD Structured Data -->
-<script type="application/ld+json" is:inline set:html={JSON.stringify(baseSchema)} />
+<!-- JSON-LD Structured Data (sanitized for HTML parser safety) -->
+<script type="application/ld+json" is:inline set:html={JSON.stringify(baseSchema).replace(/</g, '\\u003c')} />
 

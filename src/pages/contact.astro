@@ -95,6 +95,11 @@ const letterbirdUsername = contactData.letterbirdUser || contactData.letterbirdU
             class="letterbird-iframe"
             loading="lazy"
           ></iframe>
+          <noscript>
+            <div class="noscript-notice">
+              <p>Direct contact: You can send an inquiry directly to <a href={`mailto:${email}`}>{email}</a> or call/WhatsApp <a href={`tel:${phoneTel}`}>{phone}</a>.</p>
+            </div>
+          </noscript>
           <div class="letterbird-fallback">
             <p>Prefer standard messaging? You can also <a href={`https://letterbird.co/${letterbirdUsername}`} target="_blank" rel="noopener noreferrer">open the form in a new tab</a> or email directly at <a href={`mailto:${email}`}>{email}</a>.</p>
           </div>
@@ -287,6 +292,22 @@ const letterbirdUsername = contactData.letterbirdUser || contactData.letterbirdU
     background: transparent;
     flex: 1;
     border-radius: var(--radius-sm);
+  }
+
+  .noscript-notice {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  .noscript-notice a {
+    color: var(--accent-text);
+    text-decoration: underline;
+    font-weight: 500;
   }
 
   .letterbird-fallback {
