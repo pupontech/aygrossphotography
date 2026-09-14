@@ -4,8 +4,7 @@
  * Deploys static output from dist/ to Bunny Storage Zone
  * and purges the Bunny Pull Zone CDN cache.
  *
- * NOTE: Portfolio photography is delivered exclusively via Sanity Image CDN.
- * Bunny Storage only hosts the generated static site (HTML, CSS, JS, favicons).
+ * Bunny Storage hosts the generated static site (HTML, CSS, JS, favicons).
  */
 
 import fs from 'fs';
@@ -57,17 +56,33 @@ async function deployToBunny() {
   const allFiles = getAllFiles(distPath);
   console.log(`🚀 Found ${allFiles.length} static assets to sync to Bunny Storage: ${STORAGE_ZONE}`);
 
+  const MIME_TYPES: Record<string, string> = {
+    '.html': 'text/html; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.js': 'application/javascript; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.webmanifest': 'application/manifest+json; charset=utf-8',
+    '.xml': 'application/xml; charset=utf-8',
+    '.svg': 'image/svg+xml',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.txt': 'text/plain; charset=utf-8'
+  };
+
   for (const filePath of allFiles) {
     const relativePath = path.relative(distPath, filePath).replace(/\\/g, '/');
     const uploadUrl = `https://${storageHost}/${STORAGE_ZONE}/${relativePath}`;
     const fileStream = fs.readFileSync(filePath);
+    const ext = path.extname(filePath).toLowerCase();
+    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-    console.log(`Uploading -> /${relativePath}`);
+    console.log(`Uploading -> /${relativePath} (${contentType})`);
     const res = await fetch(uploadUrl, {
       method: 'PUT',
       headers: {
         AccessKey: STORAGE_PASSWORD,
-        'Content-Type': 'application/octet-stream'
+        'Content-Type': contentType
       },
       body: fileStream
     });

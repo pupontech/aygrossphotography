@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import SanityImage from '../components/SanityImage.astro';
-import { getAboutPage, getSiteSettings } from '../lib/sanity/client';
+import PhotoImage from '../components/PhotoImage.astro';
+import { getAboutPage, getSiteSettings } from '../lib/data';
 
 const [aboutData, settings] = await Promise.all([
   getAboutPage(),
@@ -34,11 +34,14 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
       <!-- Portrait Column -->
       {aboutData.portrait && (
         <div class="about-portrait-wrapper">
-          <SanityImage
+          <PhotoImage
             image={aboutData.portrait}
             alt="AY Gross with camera"
             loading="eager"
             fetchpriority="high"
+            width={1152}
+            height={2048}
+            aspectRatio={1152 / 2048}
             sizes="(max-width: 768px) 100vw, 420px"
             class="about-portrait-img"
           />
@@ -48,7 +51,7 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
 
       <!-- Bio Column -->
       <div class="about-content-column">
-        <div class="prose">
+        <div class="prose prose--dropcap">
           {bio.map((paragraph: string) => (
             <p>{paragraph}</p>
           ))}
@@ -100,27 +103,42 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
 
   .about-portrait-wrapper {
     position: relative;
+    opacity: 0;
+    animation: fadeSlideUp var(--transition-entrance) 100ms forwards;
+  }
+
+  @keyframes fadeSlideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   :global(.about-portrait-img) {
-    border-radius: 2px;
-    border: 1px solid var(--border-subtle);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-elevated);
+    transition: box-shadow var(--transition-smooth);
+  }
+
+  .about-portrait-wrapper:hover :global(.about-portrait-img) {
+    box-shadow: var(--shadow-hover);
   }
 
   .portrait-caption {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-top: 0.75rem;
+    margin-top: 0.85rem;
   }
 
   .about-content-column {
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+    opacity: 0;
+    animation: fadeSlideUp var(--transition-entrance) 200ms forwards;
   }
 
   .about-highlights {
@@ -135,20 +153,26 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
   .highlight-item {
     display: flex;
     flex-direction: column;
+    transition: transform var(--transition-smooth);
+  }
+
+  .highlight-item:hover {
+    transform: translateY(-2px);
   }
 
   .highlight-number {
     font-family: var(--font-brand);
     font-size: 1.75rem;
     color: var(--text-primary);
+    line-height: 1.1;
   }
 
   .highlight-label {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin-top: 0.25rem;
+    margin-top: 0.3rem;
   }
 
   .about-cta {

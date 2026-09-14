@@ -1,0 +1,21 @@
+{
+  "name": "AY Gross Photography",
+  "short_name": "AY Gross",
+  "description": "Fine art family and event photography in Jerusalem and throughout Israel by AY Gross.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#131210",
+  "theme_color": "#181716",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

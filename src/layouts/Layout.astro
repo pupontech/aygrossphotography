@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar.astro';
 import MobileNav from '../components/MobileNav.astro';
 import Lightbox from '../components/Lightbox.astro';
 import SEO from '../components/SEO.astro';
-import type { SanitySiteSettings, SanitySEO } from '../lib/sanity/types';
+import type { SiteSettings, SeoData } from '../lib/types';
 
 interface Props {
   title?: string;
@@ -14,8 +14,8 @@ interface Props {
   noIndex?: boolean;
   schemaType?: 'WebSite' | 'ImageGallery' | 'AboutPage' | 'FAQPage' | 'ContactPage';
   faqs?: Array<{ question: string; answer: string }>;
-  settings?: SanitySiteSettings | null;
-  pageSeo?: SanitySEO | null;
+  settings?: SiteSettings | null;
+  pageSeo?: SeoData | null;
 }
 
 const {
@@ -39,7 +39,18 @@ const currentPath = Astro.url.pathname;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#fcfbf9" id="theme-color-meta" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Performance: Preconnect to Google Fonts and load optimized font weights with display=swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Aleo:wght@400;600&family=Inter:wght@400;500;600&display=swap"
+    />
 
     <!-- Theme initialization script before CSS to eliminate flash -->
     <script is:inline>
@@ -90,16 +101,39 @@ const currentPath = Astro.url.pathname;
     <!-- Reusable Accessible Lightbox Dialog -->
     <Lightbox />
 
-    <!-- Global Theme Switcher Runtime Script -->
+    <!-- Global Theme Switcher Runtime Script with Full Accessibility Sync -->
     <script>
       function setupThemeToggles() {
         const toggleDesktop = document.getElementById('theme-toggle-desktop');
         const toggleMobile = document.getElementById('theme-toggle-mobile');
 
+        function updateToggleAttributes(theme: string) {
+          const isDark = theme === 'dark';
+          const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+          const themeColor = isDark ? '#131210' : '#fcfbf9';
+
+          const themeColorMeta = document.getElementById('theme-color-meta');
+          if (themeColorMeta) {
+            themeColorMeta.setAttribute('content', themeColor);
+          }
+
+          [toggleDesktop, toggleMobile].forEach((btn) => {
+            if (!btn) return;
+            btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+            btn.setAttribute('aria-label', label);
+            btn.setAttribute('title', label);
+          });
+        }
+
+        // Initialize state on load
+        const initialTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        updateToggleAttributes(initialTheme);
+
         function toggleTheme() {
           const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
           const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
           document.documentElement.setAttribute('data-theme', nextTheme);
+          updateToggleAttributes(nextTheme);
           try {
             localStorage.setItem('ay-theme', nextTheme);
           } catch (e) {}
@@ -109,7 +143,11 @@ const currentPath = Astro.url.pathname;
         toggleMobile?.addEventListener('click', toggleTheme);
       }
 
-      document.addEventListener('DOMContentLoaded', setupThemeToggles);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupThemeToggles);
+      } else {
+        setupThemeToggles();
+      }
     </script>
   </body>
 </html>

@@ -1,3 +1,7 @@
+/**
+ * Static site content — single source of truth.
+ * Edit this file to update any text, photos, or page data on the site.
+ */
 import type {
   SiteSettings,
   HomePageData,
@@ -10,9 +14,61 @@ import type {
   Photo
 } from './types';
 
-export const fallbackSiteSettings: SiteSettings = {
-  _id: 'siteSettings',
-  _type: 'siteSettings',
+// ─── Helpers ────────────────────────────────────────────────
+
+const photo = (id: string, title: string, filename: string, alt: string, featured = false): Photo => ({
+  id,
+  internalTitle: title,
+  image: {
+    asset: {
+      url: `https://aygrossphotography.com/wp-content/uploads/2023/04/${filename}`
+    }
+  },
+  alt,
+  featured
+});
+
+// ─── Photos ─────────────────────────────────────────────────
+
+export const portraitPhotos: Photo[] = [
+  photo('photo-ayg0704', 'AYG0704', 'AYG0704-scaled.jpg', 'Family portrait outdoors in natural sunlight', true),
+  photo('photo-ayg6788', 'AYG6788', 'AYG6788-scaled.jpg', 'Young boy smiling outdoors', true),
+  photo('photo-ayg7972', 'AYG7972', 'AYG7972-scaled.jpg', 'Siblings posing warmly in nature', true),
+  photo('photo-ayg8503', 'AYG8503', 'AYG8503-scaled.jpg', 'Candid portrait of smiling girl in golden hour', true),
+  photo('photo-ayg9405', 'AYG9405', 'AYG9405-scaled.jpg', 'Children laughing together outdoors', true),
+  photo('photo-mg4278', 'MG_4278', 'MG_4278-scaled.jpg', 'Baby smiling portrait', false),
+  photo('photo-mg4526', 'MG_4526_1', 'MG_4526_1-scaled.jpg', 'Family walking together in park', false),
+  photo('photo-mg5920', 'MG_5920', 'MG_5920-scaled.jpg', 'Boy sitting on grass enjoying nature', false),
+  photo('photo-mg5960', 'MG_5960', 'mg_5960-scaled.jpg', 'Toddler playful candid moment', false),
+  photo('photo-mg6397', 'MG_6397', 'MG_6397-scaled.jpg', 'Family group portrait with parents and children', true),
+  photo('photo-export0010', 'Untitled Export 0010', 'Untitled_Export-0010-scaled.jpg', 'Sisters embracing lovingly', true),
+  photo('photo-ayg160705', 'AYG160705_159_1', 'ayg160705-159-1-scaled.jpg', 'Boy joyful expression in outdoor portrait', true),
+  photo('photo-ayg0089', 'AYG0089', 'AYG0089-scaled.jpg', 'Family smiling in scenic Israeli grove', false),
+  photo('photo-ayg0384', 'AYG0384', 'AYG0384-scaled.jpg', 'Brother and sister candid outdoor portrait', false),
+  photo('photo-ayg160518', 'AYG160518_105', 'AYG160518_-105-scaled.jpg', 'Outdoor child portrait with soft background', false),
+  photo('photo-ayg160525', 'AYG160525_277', 'AYG160525_-277-scaled.jpg', 'Father and child playful portrait', true),
+  photo('photo-ayg160501', 'AYG160501_57', 'AYG160501_-57-scaled.jpg', 'Mother and children tender portrait', true),
+  photo('photo-mg1445', 'MG_1445_Edit', 'MG_1445-Edit-scaled.jpg', 'Boy in white shirt natural portrait', false),
+  photo('photo-mg1982', 'MG_1982_Edit', 'MG_1982-Edit-scaled.jpg', 'Family sitting together smiling in Jerusalem park', true),
+  photo('photo-ayg160621', 'AYG160621_218_1', 'ayg160621-218_1-scaled.jpg', 'Brothers smiling together in golden hour', true),
+  photo('photo-ayg9991', 'AYG9991', 'AYG9991-scaled.jpg', 'Young girl gentle portrait outdoors', false),
+  photo('photo-mg1236', 'MG_1236', 'MG_1236-scaled.jpg', 'Family celebrating together in field', false)
+];
+
+export const eventPhotos: Photo[] = [
+  photo('photo-mg5400', 'MG_5400', 'MG_5400-scaled.jpg', 'Event guests dancing and celebrating with joy', true),
+  photo('photo-mg9223', 'MG_9223', 'MG_9223-scaled.jpg', 'Bar Mitzvah boy celebrating with family', true),
+  photo('photo-ayg9271', 'AYG9271', 'AYG9271-scaled.jpg', 'Celebration banquet gathering in Jerusalem', true),
+  photo('photo-ayg160626', 'AYG160626_368_1', 'ayg160626-368_1.jpg', 'Simcha celebration moment with joyful guests', true),
+  photo('photo-mg9242', 'MG_9242_Edit', 'MG_9242-Edit-scaled.jpg', 'Bar Mitzvah family formal portrait', true),
+  photo('photo-mg4771', 'MG_4771', 'MG_4771-scaled.jpg', 'Grandparents and children celebrating at simcha', true),
+  photo('photo-y7633', 'Y_7633', 'Y__7633-scaled.jpg', 'Candid laughter at family event', true),
+  photo('photo-ayg9192', 'AYG9192', 'AYG9192-scaled.jpg', 'Joyful celebration moment on the dance floor', true)
+];
+
+// ─── Site Settings ──────────────────────────────────────────
+
+export const siteSettings: SiteSettings = {
   businessName: 'AY Gross Photography',
   shortName: 'AY Gross',
   siteDescription: 'Jerusalem & Israel family portrait and event photographer. Natural, candid, joyful photography.',
@@ -31,42 +87,34 @@ export const fallbackSiteSettings: SiteSettings = {
   footerText: '© AY Gross Photography. All rights reserved.'
 };
 
-export const fallbackTestimonials: Testimonial[] = [
+// ─── Testimonials ───────────────────────────────────────────
+
+export const testimonials: Testimonial[] = [
   {
-    _id: 't-1',
-    _type: 'testimonial',
     clientName: 'Shulamis Katz',
     quote: "We have been using AY Gross for many years for our family pictures. He is a pleasure to work with and he makes it fun for the kids so they don't get tired of posing. We have beautiful family pictures and would highly recommend him!",
     featured: true,
     order: 1
   },
   {
-    _id: 't-2',
-    _type: 'testimonial',
     clientName: 'Tohn Family',
     quote: "AY did an amazing job, not only did he get the little kids to pose perfectly, but he got the adults to behave too!! We couldn't be more happy with the results. Thank you",
     featured: true,
     order: 2
   },
   {
-    _id: 't-3',
-    _type: 'testimonial',
     clientName: 'ER Lubling',
     quote: "AY took beautiful family portraits for us. The best part was that he had endless patience for the kids and knew how to get them interested in complying with the poses. Thank you AY!",
     featured: true,
     order: 3
   },
   {
-    _id: 't-4',
-    _type: 'testimonial',
     clientName: 'Reingold Family',
     quote: "We just wanted to thank you so much. I can't stop looking at the pictures. Your eye for symmetry is wonderful. Thank you for giving us so much pleasure!",
     featured: true,
     order: 4
   },
   {
-    _id: 't-5',
-    _type: 'testimonial',
     clientName: 'Eli Weiss',
     quote: "AY did an amazing job with our family pictures. He worked within the available environment and made the pictures look incredible. He had the patience to not only take pictures of adults but also our 1.5 year old who he got to pose and smile! Within the time frame AY was able to get pictures in multiple locations and they all turned out amazing.",
     featured: true,
@@ -74,9 +122,36 @@ export const fallbackTestimonials: Testimonial[] = [
   }
 ];
 
-export const fallbackAboutPage: AboutPageData = {
-  _id: 'aboutPage',
-  _type: 'aboutPage',
+// ─── Page Data ──────────────────────────────────────────────
+
+export const homePage: HomePageData = {
+  heading: "I'm AY, an Israel-based photographer for family portraits and events.",
+  supportingCopy: "Capturing natural expressions, joyful connections, and spontaneous family moments with timeless simplicity.",
+  featuredPhotos: [
+    portraitPhotos[0],
+    portraitPhotos[1],
+    portraitPhotos[2],
+    portraitPhotos[3],
+    portraitPhotos[4],
+    portraitPhotos[9],
+    portraitPhotos[10],
+    portraitPhotos[11],
+    portraitPhotos[15],
+    portraitPhotos[16],
+    portraitPhotos[18],
+    portraitPhotos[19],
+    eventPhotos[0],
+    eventPhotos[1]
+  ],
+  ctaLabel: 'Book a Session',
+  ctaDestination: '/contact',
+  seo: {
+    metaTitle: 'AY Gross Photography | Jerusalem Family Portraits & Events',
+    metaDescription: "Jerusalem & Israel based photographer for family portraits and events. Candid, natural, and timeless photography."
+  }
+};
+
+export const aboutPage: AboutPageData = {
   title: 'About Me',
   portrait: {
     asset: {
@@ -85,9 +160,9 @@ export const fallbackAboutPage: AboutPageData = {
   },
   portraitAlt: 'AY Gross holding a camera',
   bioParagraphs: [
-    "Hi! I am AY Gross and I’m originally from Cleveland, OH.",
-    "I’ve always enjoyed a very close relationship with my fantastic grandfather, Dr. Jeff Gross. When I was in 7th grade, my grandfather generously offered to teach me everything he knew about photography. He had been taking pictures since the 1960s and wanted to show me how rewarding and also challenging the medium could be.",
-    "I’ll admit now that I agreed to be his student mostly so I would have an excuse to spend more time with him! As our lessons progressed however, I realized that I enjoyed the art almost as much as I enjoyed the instruction (and the instructor!). I was hooked. I loved how photography let me look at everyday things like a flower or a lake and decide with my camera that this simple thing could be captured and made into art.",
+    "Hi! I am AY Gross and I'm originally from Cleveland, OH.",
+    "I've always enjoyed a very close relationship with my fantastic grandfather, Dr. Jeff Gross. When I was in 7th grade, my grandfather generously offered to teach me everything he knew about photography. He had been taking pictures since the 1960s and wanted to show me how rewarding and also challenging the medium could be.",
+    "I'll admit now that I agreed to be his student mostly so I would have an excuse to spend more time with him! As our lessons progressed however, I realized that I enjoyed the art almost as much as I enjoyed the instruction (and the instructor!). I was hooked. I loved how photography let me look at everyday things like a flower or a lake and decide with my camera that this simple thing could be captured and made into art.",
     "I spent my high school years busy, taking both classes and pictures. During that time, I happily took pictures of families and small simchas. Coming to yeshiva in Israel in 2017, I quickly realized that there was need in the Anglo community for quality photography at a reasonable price. I have proudly served as a photographer here in Israel since then.",
     "I love photographing families; watching them interact and the dynamics between all the different members. I specialize in photographing kids. Keeping them happy and engaged is my number one priority. I love watching them as they delight in the small, seemingly mundane details of our gorgeous world. And you will love how natural and happy the photos are. I try to keep my prices reasonable and my turnaround times (unreasonably) fast. I want you and your family to enjoy your new pictures as quickly as possible. I usually answer questions within 24 hours. I am looking forward to hearing from you and meeting you and your gang!"
   ],
@@ -97,19 +172,17 @@ export const fallbackAboutPage: AboutPageData = {
   }
 };
 
-export const fallbackFaqPage: FaqPageData = {
-  _id: 'faqPage',
-  _type: 'faqPage',
+export const faqPage: FaqPageData = {
   title: "Frequently Asked Questions",
   intro: 'Answers to common questions about preparing for your family portrait session or event.',
   faqs: [
     {
       question: 'What should we wear for our session?',
-      answer: 'The best advice is to choose clothes that you feel comfortable in, and that are simple and neutral as possible. Choose clothes without an illustration, text or logo. For adults, one plain color is best – although bear in mind that plain black or white clothes don’t photograph that well. Should you wear a watch? Yes, if it’s a piece of jewelry. No, if it’s constantly lighting up with incoming text notifications.'
+      answer: "The best advice is to choose clothes that you feel comfortable in, and that are simple and neutral as possible. Choose clothes without an illustration, text or logo. For adults, one plain color is best \u2013 although bear in mind that plain black or white clothes don't photograph that well. Should you wear a watch? Yes, if it's a piece of jewelry. No, if it's constantly lighting up with incoming text notifications."
     },
     {
       question: 'When is the best time of day to take pictures?',
-      answer: 'Lighting wise the “golden hour” (1 hour before sunset) is ideal. But it is more important for your kids to be happy and well rested when they come to the session. If that’s in the middle of the day, then we will find a shady area.'
+      answer: 'Lighting wise the "golden hour" (1 hour before sunset) is ideal. But it is more important for your kids to be happy and well rested when they come to the session. If that\'s in the middle of the day, then we will find a shady area.'
     },
     {
       question: 'What if it rains on the day of our session?',
@@ -134,9 +207,7 @@ export const fallbackFaqPage: FaqPageData = {
   }
 };
 
-export const fallbackPricingPage: PricingPageData = {
-  _id: 'pricingPage',
-  _type: 'pricingPage',
+export const pricingPage: PricingPageData = {
   heading: 'Investment & Pricing',
   introduction: 'Straightforward, honest pricing for families living in or visiting Israel. Every session is shot with patience and delivered with fast turnaround.',
   packages: [
@@ -189,9 +260,7 @@ export const fallbackPricingPage: PricingPageData = {
   }
 };
 
-export const fallbackContactPage: ContactPageData = {
-  _id: 'contactPage',
-  _type: 'contactPage',
+export const contactPage: ContactPageData = {
   heading: "Let's Connect",
   intro: "Have questions about scheduling a family shoot, event availability, or location ideas? Send a message below or reach out directly.",
   letterbirdUser: 'aygrossphotography',
@@ -206,111 +275,72 @@ export const fallbackContactPage: ContactPageData = {
   }
 };
 
-// Audited real active photographs from the live website
-const createAuditedPhoto = (id: string, title: string, filename: string, alt: string, featured = false): Photo => ({
-  _id: id,
-  _type: 'photo',
-  internalTitle: title,
-  image: {
-    asset: {
-      url: `https://aygrossphotography.com/wp-content/uploads/2023/04/${filename}`
-    }
-  },
-  alt,
-  featured
-});
-
-export const auditedPortraitPhotos: Photo[] = [
-  createAuditedPhoto('photo-ayg0704', 'AYG0704', 'AYG0704-scaled.jpg', 'Family portrait outdoors in natural sunlight', true),
-  createAuditedPhoto('photo-ayg6788', 'AYG6788', 'AYG6788-scaled.jpg', 'Young boy smiling outdoors', true),
-  createAuditedPhoto('photo-ayg7972', 'AYG7972', 'AYG7972-scaled.jpg', 'Siblings posing warmly in nature', true),
-  createAuditedPhoto('photo-ayg8503', 'AYG8503', 'AYG8503-scaled.jpg', 'Candid portrait of smiling girl in golden hour', true),
-  createAuditedPhoto('photo-ayg9405', 'AYG9405', 'AYG9405-scaled.jpg', 'Children laughing together outdoors', true),
-  createAuditedPhoto('photo-mg4278', 'MG_4278', 'MG_4278-scaled.jpg', 'Baby smiling portrait', false),
-  createAuditedPhoto('photo-mg4526', 'MG_4526_1', 'MG_4526_1-scaled.jpg', 'Family walking together in park', false),
-  createAuditedPhoto('photo-mg5920', 'MG_5920', 'MG_5920-scaled.jpg', 'Boy sitting on grass enjoying nature', false),
-  createAuditedPhoto('photo-mg5960', 'MG_5960', 'mg_5960-scaled.jpg', 'Toddler playful candid moment', false),
-  createAuditedPhoto('photo-mg6397', 'MG_6397', 'MG_6397-scaled.jpg', 'Family group portrait with parents and children', true),
-  createAuditedPhoto('photo-export0010', 'Untitled Export 0010', 'Untitled_Export-0010-scaled.jpg', 'Sisters embracing lovingly', true),
-  createAuditedPhoto('photo-ayg160705', 'AYG160705_159_1', 'ayg160705-159-1-scaled.jpg', 'Boy joyful expression in outdoor portrait', true),
-  createAuditedPhoto('photo-ayg0089', 'AYG0089', 'AYG0089-scaled.jpg', 'Family smiling in scenic Israeli grove', false),
-  createAuditedPhoto('photo-ayg0384', 'AYG0384', 'AYG0384-scaled.jpg', 'Brother and sister candid outdoor portrait', false),
-  createAuditedPhoto('photo-ayg160518', 'AYG160518_105', 'AYG160518_-105-scaled.jpg', 'Outdoor child portrait with soft background', false),
-  createAuditedPhoto('photo-ayg160525', 'AYG160525_277', 'AYG160525_-277-scaled.jpg', 'Father and child playful portrait', true),
-  createAuditedPhoto('photo-ayg160501', 'AYG160501_57', 'AYG160501_-57-scaled.jpg', 'Mother and children tender portrait', true),
-  createAuditedPhoto('photo-mg1445', 'MG_1445_Edit', 'MG_1445-Edit-scaled.jpg', 'Boy in white shirt natural portrait', false),
-  createAuditedPhoto('photo-mg1982', 'MG_1982_Edit', 'MG_1982-Edit-scaled.jpg', 'Family sitting together smiling in Jerusalem park', true),
-  createAuditedPhoto('photo-ayg160621', 'AYG160621_218_1', 'ayg160621-218_1-scaled.jpg', 'Brothers smiling together in golden hour', true),
-  createAuditedPhoto('photo-ayg9991', 'AYG9991', 'AYG9991-scaled.jpg', 'Young girl gentle portrait outdoors', false),
-  createAuditedPhoto('photo-mg1236', 'MG_1236', 'MG_1236-scaled.jpg', 'Family celebrating together in field', false)
-];
-
-export const auditedEventPhotos: Photo[] = [
-  createAuditedPhoto('photo-mg5400', 'MG_5400', 'MG_5400-scaled.jpg', 'Event guests dancing and celebrating with joy', true),
-  createAuditedPhoto('photo-mg9223', 'MG_9223', 'MG_9223-scaled.jpg', 'Bar Mitzvah boy celebrating with family', true),
-  createAuditedPhoto('photo-ayg9271', 'AYG9271', 'AYG9271-scaled.jpg', 'Celebration banquet gathering in Jerusalem', true),
-  createAuditedPhoto('photo-ayg160626', 'AYG160626_368_1', 'ayg160626-368_1.jpg', 'Simcha celebration moment with joyful guests', true),
-  createAuditedPhoto('photo-mg9242', 'MG_9242_Edit', 'MG_9242-Edit-scaled.jpg', 'Bar Mitzvah family formal portrait', true),
-  createAuditedPhoto('photo-mg4771', 'MG_4771', 'MG_4771-scaled.jpg', 'Grandparents and children celebrating at simcha', true),
-  createAuditedPhoto('photo-y7633', 'Y_7633', 'Y__7633-scaled.jpg', 'Candid laughter at family event', true),
-  createAuditedPhoto('photo-ayg9192', 'AYG9192', 'AYG9192-scaled.jpg', 'Joyful celebration moment on the dance floor', true)
-];
-
-export const fallbackPortraitsGallery: Gallery = {
-  _id: 'gallery-portraits',
-  _type: 'gallery',
+export const portraitsGallery: Gallery = {
   title: 'Portraits',
-  slug: { current: 'portraits' },
+  slug: 'portraits',
   categoryType: 'portraits',
   intro: 'A celebration of families, children, and spontaneous joy captured across the landscapes of Jerusalem and Israel.',
-  coverPhoto: auditedPortraitPhotos[0],
-  photos: auditedPortraitPhotos,
+  coverPhoto: portraitPhotos[0],
+  photos: portraitPhotos,
   seo: {
     metaTitle: 'Family Portraits | AY Gross Photography Jerusalem',
     metaDescription: 'Explore our portfolio of candid, natural family and children portraits in Jerusalem and throughout Israel.'
   }
 };
 
-export const fallbackEventsGallery: Gallery = {
-  _id: 'gallery-events',
-  _type: 'gallery',
+export const eventsGallery: Gallery = {
   title: 'Events',
-  slug: { current: 'events' },
+  slug: 'events',
   categoryType: 'events',
   intro: 'Heartfelt, authentic event photography for Bar & Bat Mitzvahs, Brit Milahs, and family celebrations.',
-  coverPhoto: auditedEventPhotos[0],
-  photos: auditedEventPhotos,
+  coverPhoto: eventPhotos[0],
+  photos: eventPhotos,
   seo: {
     metaTitle: 'Event Photography | AY Gross Photography Israel',
     metaDescription: 'Storytelling photography for Bar Mitzvahs, Brit Milahs, and family simchas in Jerusalem and across Israel.'
   }
 };
 
-export const fallbackHomePage: HomePageData = {
-  _id: 'homePage',
-  _type: 'homePage',
-  heading: "I'm AY, an Israel-based photographer for family portraits and events.",
-  supportingCopy: "Capturing natural expressions, joyful connections, and spontaneous family moments with timeless simplicity.",
-  featuredPhotos: [
-    auditedPortraitPhotos[0],
-    auditedPortraitPhotos[1],
-    auditedPortraitPhotos[2],
-    auditedPortraitPhotos[3],
-    auditedPortraitPhotos[4],
-    auditedPortraitPhotos[9],
-    auditedPortraitPhotos[10],
-    auditedPortraitPhotos[11],
-    auditedPortraitPhotos[15],
-    auditedPortraitPhotos[16],
-    auditedPortraitPhotos[18],
-    auditedPortraitPhotos[19],
-    auditedEventPhotos[0],
-    auditedEventPhotos[1]
-  ],
-  ctaLabel: 'Book a Session',
-  ctaDestination: '/contact',
-  seo: {
-    metaTitle: 'AY Gross Photography | Jerusalem Family Portraits & Events',
-    metaDescription: "Jerusalem & Israel based photographer for family portraits and events. Candid, natural, and timeless photography."
-  }
-};
+// ─── Data Accessor Functions ────────────────────────────────
+// Same signatures the pages used before — drop-in replacements.
+
+export function getSiteSettings(): SiteSettings {
+  return siteSettings;
+}
+
+export function getHomePage(): HomePageData {
+  return homePage;
+}
+
+export function getAboutPage(): AboutPageData {
+  return aboutPage;
+}
+
+export function getFaqPage(): FaqPageData {
+  return faqPage;
+}
+
+export function getPricingPage(): PricingPageData {
+  return pricingPage;
+}
+
+export function getContactPage(): ContactPageData {
+  return contactPage;
+}
+
+export function getTestimonials(): Testimonial[] {
+  return testimonials;
+}
+
+export function getGallery(slug: string): Gallery | null {
+  if (slug === 'portraits') return portraitsGallery;
+  if (slug === 'events' || slug === 'events-photography') return eventsGallery;
+  return null;
+}
+
+export const getGalleryBySlug = getGallery;
+
+export function getAllGalleries(): Gallery[] {
+  return [portraitsGallery, eventsGallery];
+}
+

@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  repository_dispatch:
-    types:
-      - sanity-publish
   workflow_dispatch:
 
 concurrency:
@@ -32,19 +29,15 @@ jobs:
 
       - name: TypeScript & Astro Check
         run: npx astro check
-        env:
-          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
-          PUBLIC_SANITY_DATASET: ${{ secrets.PUBLIC_SANITY_DATASET || 'production' }}
 
-      - name: Verify Content & Migration Parity
+      - name: Verify Content Parity
         run: npx tsx scripts/verify-migration.ts
 
       - name: Static Production Build
         run: npm run build
-        env:
-          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
-          PUBLIC_SANITY_DATASET: ${{ secrets.PUBLIC_SANITY_DATASET || 'production' }}
-          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+
+      - name: Run Automated QA Audit Suite
+        run: npm run test:audit
 
       - name: Deploy Static Dist to Bunny Storage & Invalidate Cache
         run: npx tsx scripts/bunny-deploy.ts

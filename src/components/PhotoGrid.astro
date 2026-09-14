@@ -1,10 +1,10 @@
 ---
-import type { SanityPhoto } from '../lib/sanity/types';
-import SanityImage from './SanityImage.astro';
-import { getLightboxImageUrl } from '../lib/sanity/image';
+import type { Photo } from '../lib/types';
+import PhotoImage from './PhotoImage.astro';
+import { getLightboxImageUrl } from '../lib/image';
 
 interface Props {
-  photos: SanityPhoto[];
+  photos: Photo[];
   galleryTitle?: string;
   columns?: number;
 }
@@ -28,9 +28,10 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
           data-alt={altText}
           data-caption={captionText}
           aria-label={`View photo ${index + 1}: ${altText}`}
+          style={`animation-delay: ${Math.min(index * 60, 600)}ms`}
         >
           <div class="photo-wrapper">
-            <SanityImage
+            <PhotoImage
               image={photo.image}
               alt={altText}
               loading={index < 3 ? 'eager' : 'lazy'}
@@ -38,6 +39,12 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
               sizes="(max-width: 640px) 100vw, (max-width: 1023px) 50vw, (max-width: 1440px) 33vw, 25vw"
               class="photo-img"
             />
+            <!-- Hover overlay with caption -->
+            {captionText && (
+              <div class="photo-overlay" aria-hidden="true">
+                <span class="photo-overlay-caption">{captionText}</span>
+              </div>
+            )}
           </div>
         </button>
       );
@@ -53,54 +60,64 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
   /* Responsive CSS Column Masonry to preserve natural photo aspect ratios */
   .photo-masonry {
     column-count: 1;
-    column-gap: 1.25rem;
+    column-gap: 1rem;
   }
 
   @media (min-width: 640px) {
     .photo-masonry {
       column-count: 2;
-      column-gap: 1.5rem;
+      column-gap: 1.25rem;
     }
   }
 
   @media (min-width: 1100px) {
     .photo-masonry {
       column-count: 3;
-      column-gap: 1.75rem;
+      column-gap: 1.25rem;
     }
   }
 
+  /* Staggered reveal animation */
   .photo-card {
     break-inside: avoid;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     width: 100%;
     padding: 0;
     border: none;
     background: none;
     text-align: left;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     position: relative;
     display: block;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: cardReveal var(--transition-entrance) forwards;
     transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  }
+
+  @keyframes cardReveal {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .photo-wrapper {
     position: relative;
     overflow: hidden;
     background-color: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: 2px;
-    transition: border-color var(--transition-smooth);
+    border-radius: var(--radius-sm);
+    transition: box-shadow var(--transition-smooth);
   }
 
   .photo-card:hover .photo-wrapper {
-    border-color: var(--border-strong);
+    box-shadow: var(--shadow-card);
   }
 
   .photo-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
   }
 
   .photo-card:focus-visible {
@@ -112,10 +129,36 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
     display: block;
     width: 100%;
     height: auto;
-    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .photo-card:hover :global(.photo-img) {
-    transform: scale(1.015);
+    transform: scale(1.03);
+  }
+
+  /* Hover overlay */
+  .photo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 1rem 1rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+    pointer-events: none;
+  }
+
+  .photo-card:hover .photo-overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .photo-overlay-caption {
+    font-size: 0.82rem;
+    color: #fcfbf9;
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
 </style>

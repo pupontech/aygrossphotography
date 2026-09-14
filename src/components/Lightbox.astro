@@ -48,10 +48,16 @@
       </button>
 
       <div class="lightbox-figure-wrapper" id="lightbox-figure-wrapper">
+        <!-- Loading spinner -->
+        <div class="lightbox-loader" id="lightbox-loader">
+          <span class="loader-dot"></span>
+          <span class="loader-dot"></span>
+          <span class="loader-dot"></span>
+        </div>
         <img
           id="lightbox-image"
           class="lightbox-image"
-          src=""
+          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E"
           alt=""
           decoding="async"
         />
@@ -87,7 +93,7 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 260ms cubic-bezier(0.16, 1, 0.3, 1), visibility 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1), visibility 300ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .lightbox-overlay[aria-hidden="false"] {
@@ -100,8 +106,8 @@
     position: absolute;
     inset: 0;
     background-color: var(--bg-lightbox);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .lightbox-container {
@@ -125,10 +131,11 @@
 
   .lightbox-counter {
     font-family: var(--font-sans);
-    font-size: 0.875rem;
-    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
     color: #a3a19b;
-    font-weight: 500;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
   }
 
   .lightbox-btn {
@@ -139,8 +146,8 @@
     height: 44px;
     border-radius: 50%;
     color: #fcfbf9;
-    background-color: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
     transition: background-color var(--transition-smooth), transform var(--transition-smooth), border-color var(--transition-smooth);
     user-select: none;
@@ -148,8 +155,13 @@
   }
 
   .lightbox-btn:hover {
-    background-color: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+  }
+
+  .lightbox-btn:active {
+    transform: scale(0.95);
   }
 
   .lightbox-btn:focus-visible {
@@ -179,17 +191,53 @@
     overflow: hidden;
   }
 
+  /* Loading spinner */
+  .lightbox-loader {
+    position: absolute;
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .lightbox-loader.visible {
+    opacity: 1;
+  }
+
+  .loader-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    animation: loaderPulse 1.2s infinite ease-in-out;
+  }
+
+  .loader-dot:nth-child(2) { animation-delay: 0.15s; }
+  .loader-dot:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes loaderPulse {
+    0%, 80%, 100% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    40% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Image transitions */
   .lightbox-image {
     max-width: 100%;
     max-height: calc(100vh - 140px);
     width: auto;
     height: auto;
     object-fit: contain;
-    border-radius: 2px;
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transform: scale(0.98);
-    transition: opacity 240ms ease-out, transform 240ms ease-out;
+    transform: scale(0.97);
+    transition: opacity 350ms ease-out, transform 350ms ease-out;
   }
 
   .lightbox-image.loaded {
@@ -198,13 +246,21 @@
   }
 
   .lightbox-caption {
-    margin-top: 0.75rem;
-    font-size: 0.9rem;
+    margin-top: 0.85rem;
+    font-size: 0.875rem;
     color: #c8c5bc;
     text-align: center;
     max-width: 800px;
     letter-spacing: 0.02em;
     min-height: 1.25rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 300ms ease 200ms;
+  }
+
+  .lightbox-image.loaded ~ .lightbox-caption {
+    opacity: 1;
   }
 
   .lightbox-caption:empty {
@@ -221,7 +277,8 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.45);
+      border-color: rgba(255, 255, 255, 0.08);
     }
 
     .lightbox-prev-btn {
@@ -245,6 +302,7 @@
     private closeBtn: HTMLElement | null = null;
     private prevBtn: HTMLElement | null = null;
     private nextBtn: HTMLElement | null = null;
+    private loaderEl: HTMLElement | null = null;
 
     private photos: Array<{
       largeSrc: string;
@@ -254,6 +312,7 @@
 
     private currentIndex: number = 0;
     private lastFocusedElement: HTMLElement | null = null;
+    private loadRequestId: number = 0;
 
     // Touch swipe handling
     private touchStartX: number = 0;
@@ -274,6 +333,7 @@
       this.closeBtn = document.getElementById('lightbox-close');
       this.prevBtn = document.getElementById('lightbox-prev');
       this.nextBtn = document.getElementById('lightbox-next');
+      this.loaderEl = document.getElementById('lightbox-loader');
     }
 
     private bindTriggers() {
@@ -377,8 +437,10 @@
 
       if (this.imageEl) {
         this.imageEl.classList.remove('loaded');
-        this.imageEl.src = '';
+        this.imageEl.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
       }
+
+      this.loaderEl?.classList.remove('visible');
 
       // Restore focus to original trigger
       if (this.lastFocusedElement) {
@@ -402,14 +464,29 @@
       const item = this.photos[this.currentIndex];
       if (!item || !this.imageEl) return;
 
+      const currentReq = ++this.loadRequestId;
+
+      // Show loader, hide image
       this.imageEl.classList.remove('loaded');
+      this.loaderEl?.classList.add('visible');
 
       const tempImg = new Image();
       tempImg.onload = () => {
+        if (this.loadRequestId !== currentReq) return;
         if (this.imageEl) {
           this.imageEl.src = item.largeSrc;
           this.imageEl.alt = item.alt;
-          this.imageEl.classList.add('loaded');
+          requestAnimationFrame(() => {
+            this.loaderEl?.classList.remove('visible');
+            this.imageEl?.classList.add('loaded');
+          });
+        }
+      };
+      tempImg.onerror = () => {
+        if (this.loadRequestId !== currentReq) return;
+        this.loaderEl?.classList.remove('visible');
+        if (this.captionEl) {
+          this.captionEl.textContent = 'Photograph unavailable. Please check your connection.';
         }
       };
       tempImg.src = item.largeSrc;
@@ -449,8 +526,15 @@
     }
   }
 
-  // Initialize lightbox on DOM ready and Astro page swaps
-  document.addEventListener('DOMContentLoaded', () => {
-    new LightboxController();
-  });
+  // Initialize lightbox on DOM ready with single-instance guard
+  function initLightbox() {
+    if ((window as any).__lightboxController) return;
+    (window as any).__lightboxController = new LightboxController();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLightbox);
+  } else {
+    initLightbox();
+  }
 </script>

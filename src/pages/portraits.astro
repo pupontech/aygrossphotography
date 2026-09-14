@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PhotoGrid from '../components/PhotoGrid.astro';
-import { getGalleryBySlug, getSiteSettings } from '../lib/sanity/client';
+import { getGalleryBySlug, getSiteSettings } from '../lib/data';
 
 const [gallery, settings] = await Promise.all([
   getGalleryBySlug('portraits'),

@@ -10,25 +10,16 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "studio:dev": "sanity dev --dir sanity",
-    "studio:build": "sanity build sanity/dist --dir sanity",
-    "migrate": "tsx scripts/migrate-wordpress.ts",
-    "audit:site": "tsx scripts/audit-existing-site.ts",
-    "verify-migration": "tsx scripts/verify-migration.ts"
+    "test:audit": "tsx scripts/audit-site-qa.ts",
+    "test": "tsx scripts/verify-migration.ts && tsx scripts/audit-site-qa.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
-    "@sanity/client": "^6.27.2",
-    "@sanity/image-url": "^1.1.0",
     "astro": "^7.3.2"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@types/node": "^22.13.9",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "sanity": "^6.13.2",
-    "styled-components": "^6.1.15",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3"
   }

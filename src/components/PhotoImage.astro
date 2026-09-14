@@ -1,9 +1,9 @@
 ---
-import type { SanityImageSource } from '../lib/sanity/types';
-import { urlFor, buildSrcSet } from '../lib/sanity/image';
+import type { ImageSource } from '../lib/types';
+import { getImageUrl, buildSrcSet } from '../lib/image';
 
 interface Props {
-  image: SanityImageSource;
+  image: ImageSource;
   alt: string;
   widths?: number[];
   sizes?: string;
@@ -34,13 +34,10 @@ if (!image) {
   return null;
 }
 
-// Compute dimensions from Sanity metadata if available
-const metadata = (image as any)?.asset?.metadata;
-const originalWidth = metadata?.dimensions?.width || customWidth || 1200;
-const originalHeight = metadata?.dimensions?.height || customHeight || (aspectRatio ? Math.round(originalWidth / aspectRatio) : 800);
-
+const defaultSrc = getImageUrl(image);
 const srcSet = buildSrcSet(image, widths);
-const defaultSrc = urlFor(image).width(1200).url();
+const originalWidth = customWidth || 1200;
+const originalHeight = customHeight || (aspectRatio ? Math.round(originalWidth / aspectRatio) : 800);
 ---
 
 <img
@@ -53,11 +50,12 @@ const defaultSrc = urlFor(image).width(1200).url();
   loading={loading}
   decoding={decoding}
   fetchpriority={fetchpriority}
-  class={`sanity-image ${className}`.trim()}
+  style={`aspect-ratio: ${aspectRatio ? aspectRatio : `${originalWidth} / ${originalHeight}`};`}
+  class={`photo-image ${className}`.trim()}
 />
 
 <style>
-  .sanity-image {
+  .photo-image {
     display: block;
     width: 100%;
     height: auto;

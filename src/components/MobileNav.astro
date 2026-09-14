@@ -1,9 +1,9 @@
 ---
-import type { SanitySiteSettings } from '../lib/sanity/types';
+import type { SiteSettings } from '../lib/types';
 
 interface Props {
   currentPath: string;
-  settings?: SanitySiteSettings | null;
+  settings?: SiteSettings | null;
 }
 
 const { currentPath, settings } = Astro.props;
@@ -22,11 +22,14 @@ const navItems = [
 const editingServicesUrl = settings?.editingServicesUrl || 'https://darkroomedits.com/';
 const businessName = settings?.businessName || 'AY Gross Photography';
 const phone = settings?.phone || '058-772-5628';
+const phoneTel = phone.startsWith('+') ? phone.replace(/[^0-9+]/g, '') : `+972${phone.replace(/^0/, '').replace(/[^0-9]/g, '')}`;
 const email = settings?.email || 'aygrossphotography@gmail.com';
+const instagramUrl = settings?.socialLinks?.instagram || 'https://instagram.com/aygrossphotography';
+const facebookUrl = settings?.socialLinks?.facebook || 'https://facebook.com/aygrossphotography';
 ---
 
 <div class="mobile-nav-container">
-  <!-- Fixed mobile top bar -->
+  <!-- Fixed mobile top bar with frosted glass -->
   <header class="mobile-header">
     <a href="/" class="mobile-brand" aria-label="AY Gross Photography - Home">
       <span class="mobile-brand-name">{businessName}</span>
@@ -39,6 +42,7 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
         class="mobile-theme-btn"
         id="theme-toggle-mobile"
         aria-label="Toggle dark and light mode"
+        aria-pressed="false"
       >
         <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
@@ -123,7 +127,35 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
       </nav>
 
       <div class="drawer-footer">
-        <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} class="drawer-contact-link">{phone}</a>
+        <div class="drawer-socials" aria-label="Social Links">
+          <a
+            href={instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="drawer-social-link"
+            aria-label="Instagram Profile"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram</span>
+          </a>
+          <a
+            href={facebookUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="drawer-social-link"
+            aria-label="Facebook Profile"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+            <span>Facebook</span>
+          </a>
+        </div>
+        <a href={`tel:${phoneTel}`} class="drawer-contact-link">{phone}</a>
         <a href={`mailto:${email}`} class="drawer-contact-link">{email}</a>
       </div>
     </div>
@@ -141,13 +173,16 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
     }
   }
 
+  /* Frosted glass header */
   .mobile-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     height: var(--header-height-mobile);
-    background-color: var(--bg-sidebar);
+    background-color: color-mix(in srgb, var(--bg-sidebar) 80%, transparent);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
     border-bottom: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
@@ -170,7 +205,7 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
   .mobile-actions {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .mobile-theme-btn,
@@ -181,9 +216,22 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
     min-width: 44px;
     min-height: 44px;
     color: var(--text-primary);
-    border-radius: 4px;
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-smooth);
   }
 
+  .mobile-theme-btn:hover,
+  .hamburger-btn:hover {
+    background-color: var(--bg-hover);
+  }
+
+  /* Sun/moon icons in mobile */
+  :global([data-theme="dark"]) .mobile-theme-btn .sun-icon { display: block; }
+  :global([data-theme="dark"]) .mobile-theme-btn .moon-icon { display: none; }
+  :global(:not([data-theme="dark"])) .mobile-theme-btn .sun-icon { display: none; }
+  :global(:not([data-theme="dark"])) .mobile-theme-btn .moon-icon { display: block; }
+
+  /* Overlay */
   .mobile-drawer-overlay {
     position: fixed;
     inset: 0;
@@ -201,9 +249,12 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
   .mobile-drawer-backdrop {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 
+  /* Drawer panel */
   .mobile-drawer {
     position: absolute;
     top: 0;
@@ -216,7 +267,8 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
     flex-direction: column;
     padding: 1.5rem 1.5rem 2rem;
     transform: translateX(100%);
-    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
   }
 
   .mobile-drawer-overlay[aria-hidden="false"] .mobile-drawer {
@@ -227,15 +279,15 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--border-subtle);
   }
 
   .drawer-title {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     color: var(--text-muted);
   }
 
@@ -246,6 +298,12 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
     min-width: 44px;
     min-height: 44px;
     color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-smooth);
+  }
+
+  .drawer-close-btn:hover {
+    background-color: var(--bg-hover);
   }
 
   .drawer-nav {
@@ -257,49 +315,86 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.25rem;
   }
 
   .drawer-link {
     display: block;
-    padding: 0.65rem 0;
-    font-size: 1.15rem;
+    padding: 0.75rem 0.85rem;
+    font-size: 1.1rem;
     color: var(--text-secondary);
     font-family: var(--font-brand);
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-smooth), background-color var(--transition-smooth);
+    position: relative;
+  }
+
+  .drawer-link:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-hover);
   }
 
   .drawer-link.active {
     color: var(--text-primary);
     font-weight: 600;
+    background-color: var(--accent-soft);
+    border-left: 2px solid var(--accent);
   }
 
   .external-drawer-link {
     font-style: italic;
     color: var(--text-muted);
+    margin-top: 0.5rem;
   }
 
   .drawer-footer {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
   }
 
   .drawer-contact-link {
     font-size: 0.85rem;
     color: var(--text-muted);
+    transition: color var(--transition-smooth);
+  }
+
+  .drawer-contact-link:hover {
+    color: var(--accent-text);
+  }
+
+  .drawer-socials {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .drawer-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    transition: color var(--transition-smooth);
+  }
+
+  .drawer-social-link:hover {
+    color: var(--accent-text);
   }
 </style>
 
 <script>
-  // Mobile drawer interactive logic
+  // Mobile drawer interactive logic with accessible focus trapping
   function initMobileNav() {
     const trigger = document.getElementById('mobile-menu-trigger');
     const closeBtn = document.getElementById('mobile-menu-close');
     const overlay = document.getElementById('mobile-drawer-overlay');
     const backdrop = document.getElementById('mobile-drawer-backdrop');
+    const drawer = document.getElementById('mobile-drawer');
 
     if (!trigger || !overlay) return;
 
@@ -321,9 +416,40 @@ const email = settings?.email || 'aygrossphotography@gmail.com';
     closeBtn?.addEventListener('click', closeDrawer);
     backdrop?.addEventListener('click', closeDrawer);
 
+    // Close drawer when any internal navigation link is clicked
+    const drawerLinks = drawer?.querySelectorAll<HTMLAnchorElement>('.drawer-link');
+    drawerLinks?.forEach((link) => {
+      link.addEventListener('click', closeDrawer);
+    });
+
     document.addEventListener('keydown', (e) => {
-      if (overlay?.getAttribute('aria-hidden') === 'false' && e.key === 'Escape') {
+      if (overlay?.getAttribute('aria-hidden') !== 'false') return;
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
         closeDrawer();
+      } else if (e.key === 'Tab' && drawer) {
+        // Focus trap inside drawer
+        const focusableSelectors = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+        const focusables = Array.from(drawer.querySelectorAll<HTMLElement>(focusableSelectors))
+          .filter((el) => el.offsetParent !== null);
+
+        if (focusables.length === 0) return;
+
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       }
     });
   }

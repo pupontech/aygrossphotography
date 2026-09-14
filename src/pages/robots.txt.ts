@@ -3,7 +3,6 @@ import type { APIRoute } from 'astro';
 export const GET: APIRoute = () => {
   const robotsTxt = `User-agent: *
 Allow: /
-Disallow: /events-photography
 Disallow: /404
 
 Sitemap: https://aygrossphotography.com/sitemap-index.xml

@@ -1,21 +1,8 @@
-export interface SanityImageSource {
-  _type?: 'image';
+// Clean type definitions for site content — no CMS dependency
+
+export interface ImageSource {
   asset: {
-    _ref?: string;
-    _type?: 'reference';
-    url?: string;
-  };
-  crop?: {
-    top: number;
-    bottom: number;
-    left: number;
-    right: number;
-  };
-  hotspot?: {
-    x: number;
-    y: number;
-    height: number;
-    width: number;
+    url: string;
   };
   alt?: string;
 }
@@ -23,34 +10,25 @@ export interface SanityImageSource {
 export interface SeoData {
   metaTitle?: string;
   metaDescription?: string;
-  ogImage?: SanityImageSource;
+  ogImage?: ImageSource;
   noIndex?: boolean;
 }
 
 export interface Photo {
-  _id: string;
-  _type: 'photo';
+  id: string;
   internalTitle: string;
-  image: SanityImageSource;
+  image: ImageSource;
   alt: string;
   caption?: string;
   location?: string;
   datePhotographed?: string;
   tags?: string[];
   featured?: boolean;
-  legacyFilename?: string;
-  legacySourceUrl?: string;
-  legacyWordPressMediaId?: number;
-  migrationHash?: string;
 }
 
 export interface Gallery {
-  _id: string;
-  _type: 'gallery';
   title: string;
-  slug: {
-    current: string;
-  };
+  slug: string;
   categoryType: string;
   intro?: string;
   coverPhoto?: Photo;
@@ -59,12 +37,9 @@ export interface Gallery {
 }
 
 export interface SiteSettings {
-  _id: string;
-  _type: 'siteSettings';
   businessName: string;
   shortName: string;
   siteDescription: string;
-  logo?: SanityImageSource;
   email: string;
   phone: string;
   whatsApp: string;
@@ -80,8 +55,6 @@ export interface SiteSettings {
 }
 
 export interface HomePageData {
-  _id: string;
-  _type: 'homePage';
   heading: string;
   supportingCopy?: string;
   featuredPhotos: Photo[];
@@ -91,10 +64,8 @@ export interface HomePageData {
 }
 
 export interface AboutPageData {
-  _id: string;
-  _type: 'aboutPage';
   title: string;
-  portrait?: SanityImageSource;
+  portrait?: ImageSource;
   portraitAlt?: string;
   bioParagraphs: string[];
   bio?: string[];
@@ -107,8 +78,6 @@ export interface FaqItem {
 }
 
 export interface FaqPageData {
-  _id: string;
-  _type: 'faqPage';
   title: string;
   intro?: string;
   faqs: FaqItem[];
@@ -125,8 +94,6 @@ export interface PricingPackage {
 }
 
 export interface PricingPageData {
-  _id: string;
-  _type: 'pricingPage';
   heading: string;
   introduction?: string;
   packages: PricingPackage[];
@@ -135,8 +102,6 @@ export interface PricingPageData {
 }
 
 export interface ContactPageData {
-  _id: string;
-  _type: 'contactPage';
   heading: string;
   intro?: string;
   letterbirdUser: string;
@@ -151,18 +116,9 @@ export interface ContactPageData {
 }
 
 export interface Testimonial {
-  _id: string;
-  _type: 'testimonial';
   clientName: string;
-  clientCompany?: string;
   quote: string;
   featured?: boolean;
   order?: number;
 }
-
-// Convenient type aliases
-export type SanityPhoto = Photo;
-export type SanitySiteSettings = SiteSettings;
-export type SanitySEO = SeoData;
-export type SanityGallery = Gallery;
 

@@ -5,6 +5,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://aygrossphotography.com',
   output: 'static',
+  compressHTML: true,
+  trailingSlash: 'never',
   build: {
     format: 'directory'
   },

@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getSiteSettings } from '../lib/sanity/client';
+import { getSiteSettings } from '../lib/data';
 
-const settings = await getSiteSettings();
+const settings = getSiteSettings();
 ---
 
 <Layout
@@ -13,7 +13,7 @@ const settings = await getSiteSettings();
   settings={settings}
 >
   <div class="error-page-container">
-    <span class="error-code">404</span>
+    <span class="error-code" aria-hidden="true">404</span>
     <h1 class="error-title">Page Not Found</h1>
     <p class="error-desc">
       The photograph or page you were looking for may have moved or no longer exists.
@@ -30,33 +30,58 @@ const settings = await getSiteSettings();
 <style>
   .error-page-container {
     max-width: 600px;
-    padding: var(--spacing-2xl) 0;
+    padding: var(--spacing-3xl) 0 var(--spacing-2xl);
     margin: 0 auto;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    animation: pageEnter var(--transition-entrance) both;
+  }
+
+  @keyframes pageEnter {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .error-code {
     font-family: var(--font-brand);
-    font-size: 5rem;
+    font-size: 6rem;
     line-height: 1;
     color: var(--text-muted);
-    margin-bottom: 1rem;
-    opacity: 0.6;
+    margin-bottom: 1.25rem;
+    opacity: 0.35;
+    animation: floatCode 4s ease-in-out infinite;
+    user-select: none;
+  }
+
+  @keyframes floatCode {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
   }
 
   .error-title {
     font-size: 2.25rem;
     margin-bottom: 1rem;
+    letter-spacing: -0.02em;
   }
 
   .error-desc {
     font-size: 1.05rem;
     color: var(--text-secondary);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.75rem;
     line-height: 1.6;
+    max-width: 440px;
   }
 
   .error-actions {

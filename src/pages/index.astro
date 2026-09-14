@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PhotoGrid from '../components/PhotoGrid.astro';
-import { getHomePage, getSiteSettings, getTestimonials } from '../lib/sanity/client';
+import { getHomePage, getSiteSettings, getTestimonials } from '../lib/data';
 
 const [homeData, settings, testimonials] = await Promise.all([
   getHomePage(),
@@ -22,10 +22,10 @@ const displayedTestimonials = (testimonials || []).slice(0, 3);
 >
   <div class="homepage-container">
     <!-- Editorial Introduction -->
-    <header class="page-intro">
-      <h1 class="page-title">{homeData.heading || 'Moments framed with heart and light.'}</h1>
+    <header class="page-intro hero-intro">
+      <h1 class="page-title hero-title">{homeData.heading || 'Moments framed with heart and light.'}</h1>
       {homeData.supportingCopy && (
-        <p class="page-subtitle">{homeData.supportingCopy}</p>
+        <p class="page-subtitle hero-subtitle">{homeData.supportingCopy}</p>
       )}
     </header>
 
@@ -40,9 +40,10 @@ const displayedTestimonials = (testimonials || []).slice(0, 3);
         <div class="section-divider"></div>
         <h2 class="section-eyebrow">Client Reflections</h2>
         <div class="testimonials-grid">
-          {displayedTestimonials.map((item) => (
-            <blockquote class="testimonial-card">
-              <p class="testimonial-quote">“{item.quote}”</p>
+          {displayedTestimonials.map((item, index) => (
+            <blockquote class="testimonial-card" style={`animation-delay: ${index * 100 + 100}ms`}>
+              <div class="quote-glyph" aria-hidden="true">"</div>
+              <p class="testimonial-quote">{item.quote}</p>
               <footer class="testimonial-author">— {item.clientName}</footer>
             </blockquote>
           ))}
@@ -69,42 +70,50 @@ const displayedTestimonials = (testimonials || []).slice(0, 3);
     width: 100%;
   }
 
+  /* Hero intro animation */
+  .hero-intro {
+    animation: heroEnter 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes heroEnter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-title {
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    max-width: 600px;
+  }
+
   .portfolio-section {
     margin-bottom: var(--spacing-2xl);
   }
 
   /* Testimonials styling */
   .testimonials-section {
-    margin: var(--spacing-2xl) 0;
+    margin: var(--spacing-3xl) 0 var(--spacing-2xl);
     padding-top: var(--spacing-lg);
-  }
-
-  .section-divider {
-    width: 48px;
-    height: 1px;
-    background-color: var(--border-strong);
-    margin-bottom: 2rem;
-  }
-
-  .section-eyebrow {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-    font-weight: 500;
   }
 
   .testimonials-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 2rem;
   }
 
   @media (min-width: 768px) {
     .testimonials-grid {
       grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      gap: 1.75rem;
     }
   }
 
@@ -114,33 +123,62 @@ const displayedTestimonials = (testimonials || []).slice(0, 3);
     justify-content: space-between;
     background-color: var(--bg-secondary);
     padding: 2rem 1.75rem;
-    border-radius: 2px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-subtle);
+    position: relative;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeSlideUp var(--transition-entrance) forwards;
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
+  }
+
+  @keyframes fadeSlideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--border-strong);
+  }
+
+  .quote-glyph {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.4;
+    margin-bottom: -0.5rem;
+    user-select: none;
   }
 
   .testimonial-quote {
     font-family: var(--font-serif);
-    font-size: 1.15rem;
-    line-height: 1.6;
+    font-size: 1.1rem;
+    line-height: 1.65;
     color: var(--text-primary);
     margin-bottom: 1.5rem;
     font-style: italic;
   }
 
   .testimonial-author {
-    font-size: 0.875rem;
-    letter-spacing: 0.04em;
-    color: var(--text-secondary);
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
     font-weight: 500;
+    text-transform: uppercase;
   }
 
-  /* Understated CTA */
+  /* Warm gradient CTA */
   .cta-section {
-    margin: var(--spacing-2xl) 0 var(--spacing-xl);
-    padding: 3.5rem 2rem;
-    background-color: var(--bg-secondary);
+    margin: var(--spacing-3xl) 0 var(--spacing-xl);
+    padding: 4rem 2.5rem;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, color-mix(in srgb, var(--accent-soft) 60%, var(--bg-secondary)) 100%);
     border: 1px solid var(--border-subtle);
-    border-radius: 2px;
+    border-radius: var(--radius-lg);
     text-align: center;
   }
 

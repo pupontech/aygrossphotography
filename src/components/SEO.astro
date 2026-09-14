@@ -1,5 +1,5 @@
 ---
-import type { SanitySiteSettings, SanitySEO } from '../lib/sanity/types';
+import type { SiteSettings, SeoData } from '../lib/types';
 
 interface Props {
   title?: string;
@@ -10,8 +10,8 @@ interface Props {
   type?: 'website' | 'article' | 'profile';
   schemaType?: 'WebSite' | 'ImageGallery' | 'AboutPage' | 'FAQPage' | 'ContactPage';
   faqs?: Array<{ question: string; answer: string }>;
-  settings?: SanitySiteSettings | null;
-  pageSeo?: SanitySEO | null;
+  settings?: SiteSettings | null;
+  pageSeo?: SeoData | null;
 }
 
 const {
@@ -76,10 +76,61 @@ const baseSchema = {
   ]
 };
 
-// Add FAQPage schema if relevant
-if (schemaType === 'FAQPage' && faqs.length > 0) {
+// Add BreadcrumbList schema on all non-home subpages
+if (canonical !== siteUrl && !canonical.endsWith('/404')) {
+  const pageLabel = customTitle || finalTitle.split('|')[0].trim();
+  (baseSchema['@graph'] as any[]).push({
+    '@type': 'BreadcrumbList',
+    '@id': `${canonical}#breadcrumb`,
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: pageLabel,
+        item: canonical
+      }
+    ]
+  });
+}
+
+// Add page-specific schemas based on schemaType
+if (schemaType === 'ImageGallery') {
+  (baseSchema['@graph'] as any[]).push({
+    '@type': 'ImageGallery',
+    '@id': `${canonical}#gallery`,
+    name: finalTitle,
+    description: finalDescription,
+    url: canonical,
+    provider: { '@id': `${siteUrl}/#organization` }
+  });
+} else if (schemaType === 'AboutPage') {
+  (baseSchema['@graph'] as any[]).push({
+    '@type': 'AboutPage',
+    '@id': `${canonical}#about`,
+    name: finalTitle,
+    description: finalDescription,
+    url: canonical,
+    mainEntity: { '@id': `${siteUrl}/#organization` }
+  });
+} else if (schemaType === 'ContactPage') {
+  (baseSchema['@graph'] as any[]).push({
+    '@type': 'ContactPage',
+    '@id': `${canonical}#contact`,
+    name: finalTitle,
+    description: finalDescription,
+    url: canonical,
+    mainEntity: { '@id': `${siteUrl}/#organization` }
+  });
+} else if (schemaType === 'FAQPage' && faqs.length > 0) {
   (baseSchema['@graph'] as any[]).push({
     '@type': 'FAQPage',
+    '@id': `${canonical}#faq`,
     mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
@@ -100,11 +151,16 @@ if (schemaType === 'FAQPage' && faqs.length > 0) {
 <meta name="robots" content={isNoIndex ? 'noindex, nofollow' : 'index, follow'} />
 
 <!-- Open Graph / Facebook -->
+<meta property="og:locale" content="en_US" />
 <meta property="og:type" content={type} />
 <meta property="og:url" content={canonical} />
 <meta property="og:title" content={finalTitle} />
 <meta property="og:description" content={finalDescription} />
 <meta property="og:image" content={finalImage} />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={finalTitle} />
 <meta property="og:site_name" content={businessName} />
 
 <!-- Twitter Card -->
@@ -113,6 +169,8 @@ if (schemaType === 'FAQPage' && faqs.length > 0) {
 <meta name="twitter:title" content={finalTitle} />
 <meta name="twitter:description" content={finalDescription} />
 <meta name="twitter:image" content={finalImage} />
+<meta name="twitter:image:alt" content={finalTitle} />
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json" is:inline set:html={JSON.stringify(baseSchema)} />
+

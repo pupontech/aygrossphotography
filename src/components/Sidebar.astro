@@ -1,9 +1,9 @@
 ---
-import type { SanitySiteSettings } from '../lib/sanity/types';
+import type { SiteSettings } from '../lib/types';
 
 interface Props {
   currentPath: string;
-  settings?: SanitySiteSettings | null;
+  settings?: SiteSettings | null;
 }
 
 const { currentPath, settings } = Astro.props;
@@ -24,6 +24,8 @@ const navItems = [
 const editingServicesUrl = settings?.editingServicesUrl || 'https://darkroomedits.com/';
 const businessName = settings?.businessName || 'AY Gross Photography';
 const locationText = settings?.location || 'Jerusalem & All of Israel';
+const instagramUrl = settings?.socialLinks?.instagram || 'https://instagram.com/aygrossphotography';
+const facebookUrl = settings?.socialLinks?.facebook || 'https://facebook.com/aygrossphotography';
 ---
 
 <aside class="desktop-sidebar" aria-label="Main Navigation">
@@ -34,6 +36,7 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
         <span class="brand-title">{businessName}</span>
         <span class="brand-subtitle">Fine Art & Family Portfolio</span>
       </a>
+      <div class="brand-rule"></div>
     </header>
 
     <!-- Navigation links -->
@@ -48,7 +51,7 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
                 class={`nav-link ${isActive ? 'active' : ''}`}
                 aria-current={isActive ? 'page' : undefined}
               >
-                {item.label}
+                <span class="nav-link-text">{item.label}</span>
               </a>
             </li>
           );
@@ -62,7 +65,8 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
             class="nav-link external-link"
             title="External link to Darkroom Edits"
           >
-            Editing Services <span class="arrow-glyph" aria-hidden="true">↗</span>
+            <span class="nav-link-text">Editing Services</span>
+            <span class="arrow-glyph" aria-hidden="true">↗</span>
           </a>
         </li>
       </ul>
@@ -76,24 +80,57 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
           class="theme-toggle-btn"
           id="theme-toggle-desktop"
           aria-label="Toggle dark and light mode"
+          aria-pressed="false"
           title="Toggle color theme"
         >
-          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
+          <span class="theme-icon-wrapper">
+            <svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
           <span class="theme-label">Theme</span>
         </button>
+      </div>
+
+      <!-- Social Links -->
+      <div class="sidebar-socials" aria-label="Social Links">
+        <a
+          href={instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-icon-link"
+          aria-label="Instagram Profile"
+          title="Instagram"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+        <a
+          href={facebookUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-icon-link"
+          aria-label="Facebook Profile"
+          title="Facebook"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+        </a>
       </div>
 
       <div class="contact-brief">
@@ -132,8 +169,9 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
     overflow-y: auto;
   }
 
+  /* Brand */
   .brand-container {
-    margin-bottom: 2.75rem;
+    margin-bottom: 2.25rem;
   }
 
   .brand-link {
@@ -149,16 +187,30 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
     color: var(--text-primary);
     line-height: 1.2;
     font-weight: 400;
+    transition: color var(--transition-smooth);
+  }
+
+  .brand-link:hover .brand-title {
+    color: var(--accent-text);
   }
 
   .brand-subtitle {
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-muted);
     margin-top: 0.35rem;
   }
 
+  .brand-rule {
+    width: 32px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-top: 1.25rem;
+    border-radius: 1px;
+  }
+
+  /* Navigation */
   .sidebar-nav {
     flex: 1;
   }
@@ -167,56 +219,74 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 0.2rem;
   }
 
   .nav-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    font-size: 0.95rem;
-    letter-spacing: 0.04em;
+    font-size: 0.92rem;
+    letter-spacing: 0.03em;
     color: var(--text-secondary);
-    padding: 0.25rem 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
     position: relative;
-    transition: color var(--transition-smooth), transform var(--transition-smooth);
+    transition: color var(--transition-smooth), background-color var(--transition-smooth), transform var(--transition-smooth);
   }
 
   .nav-link:hover {
     color: var(--text-primary);
-    transform: translateX(3px);
+    background-color: var(--bg-hover);
+    transform: translateX(2px);
   }
 
   .nav-link.active {
     color: var(--text-primary);
     font-weight: 500;
+    background-color: var(--accent-soft);
   }
 
   .nav-link.active::before {
     content: '';
     position: absolute;
-    left: -1rem;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: var(--text-primary);
+    width: 2px;
+    height: 18px;
+    border-radius: 1px;
+    background-color: var(--accent);
+    transition: height var(--transition-smooth);
+  }
+
+  .nav-link-text {
+    position: relative;
   }
 
   .external-link {
     color: var(--text-muted);
     font-style: italic;
+    margin-top: 0.5rem;
   }
 
   .arrow-glyph {
     display: inline-block;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     margin-left: 0.3rem;
     font-style: normal;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
   }
 
+  .external-link:hover .arrow-glyph {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Footer */
   .sidebar-footer {
-    padding-top: 2rem;
+    padding-top: 1.5rem;
     border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
@@ -227,41 +297,89 @@ const locationText = settings?.location || 'Jerusalem & All of Israel';
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.45rem 0.75rem;
-    border-radius: 4px;
+    padding: 0.5rem 0.85rem;
+    border-radius: 100px;
     color: var(--text-secondary);
     border: 1px solid var(--border-subtle);
     background-color: var(--bg-primary);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
     transition: all var(--transition-smooth);
   }
 
   .theme-toggle-btn:hover {
     color: var(--text-primary);
     border-color: var(--border-strong);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .theme-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    position: relative;
   }
 
   /* Sun/moon icon visibility based on data-theme */
+  .sun-icon, .moon-icon {
+    position: absolute;
+    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+  }
+
   :global([data-theme="dark"]) .sun-icon {
-    display: block;
+    opacity: 1;
+    transform: rotate(0deg);
   }
   :global([data-theme="dark"]) .moon-icon {
-    display: none;
+    opacity: 0;
+    transform: rotate(-90deg);
   }
   :global(:not([data-theme="dark"])) .sun-icon {
-    display: none;
+    opacity: 0;
+    transform: rotate(90deg);
   }
   :global(:not([data-theme="dark"])) .moon-icon {
-    display: block;
+    opacity: 1;
+    transform: rotate(0deg);
   }
 
   .contact-brief {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     line-height: 1.5;
   }
 
   .location-text {
     margin-bottom: 0.25rem;
+  }
+
+  .sidebar-socials {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .social-icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-smooth), background-color var(--transition-smooth);
+  }
+
+  .social-icon-link:hover {
+    color: var(--accent-text);
+    background-color: var(--bg-hover);
+  }
+
+  .social-icon-link:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
   }
 </style>

@@ -1,35 +1,30 @@
 # AY Gross Photography — Modern Portfolio Website
 
-A minimal, photography-first portfolio website rebuilt for **AY Gross Photography** ([aygrossphotography.com](https://aygrossphotography.com/)). Built with **Astro 7 (SSG)**, **TypeScript**, **Sanity CMS**, **Sanity Image CDN**, **Bunny.net Storage & CDN**, and **GitHub Actions CI/CD**.
+A minimal, photography-first portfolio website rebuilt for **AY Gross Photography** ([aygrossphotography.com](https://aygrossphotography.com/)). Built with **Astro 7 (SSG)**, **TypeScript**, **Bunny.net Storage & CDN**, and **GitHub Actions CI/CD**.
 
 ---
 
 ## 📸 Architectural Overview
 
 ```
-                      +-----------------------------+
-                      |   Sanity Studio (Separate)  |
-                      |   - Sanity Content Lake     |
-                      |   - Photo Documents         |
-                      |   - Ordered Galleries       |
-                      +--------------+--------------+
-                                     |
-                          Publish Webhook / Build
-                                     |
-                                     v
-+------------------------+    +--------------+    +--------------------------+
-|  GitHub Actions CI/CD  |--->| Astro 7 SSG  |--->| Bunny.net Storage & CDN  |
-|  - npm ci              |    | (Zero React) |    | - Static HTML/CSS/JS     |
-|  - astro check         |    | Pure TS/CSS  |    | - Pull Zone Edge Cache   |
-|  - npm run build       |    +--------------+    +-------------+------------+
-+------------------------+                                      |
-                                                                v
-                                                    https://aygrossphotography.com
-                                                                |
-                                                    Portfolio Photography (Direct)
-                                                                |
-                                                                v
-                                                    Sanity Image CDN (WebP/AVIF)
++------------------------------------+
+|         Static Data Layer          |
+|    - src/lib/data.ts               |
+|    - High-res photography items    |
+|    - Curated galleries & copy      |
++-----------------+------------------+
+                  |
+        Git Push / Build Trigger
+                  |
+                  v
++------------------------+    +------------------+    +--------------------------+
+|  GitHub Actions CI/CD  |--->|   Astro 7 SSG    |--->| Bunny.net Storage & CDN  |
+|  - npm ci              |    |   (Zero React)   |    | - Static HTML/CSS/JS     |
+|  - astro check         |    |   Pure TS/CSS    |    | - Pull Zone Edge Cache   |
+|  - npm run build       |    +------------------+    +-------------+------------+
++------------------------+                                          |
+                                                                    v
+                                                        https://aygrossphotography.com
 ```
 
 ---
@@ -39,35 +34,15 @@ A minimal, photography-first portfolio website rebuilt for **AY Gross Photograph
 1. **Photography-First & Editorial:**
    Photographs provide all the color. UI chrome is understated with a restrained neutral palette (`#fcfbf9` light, `#121211` dark). No CSS color filters are applied to photography.
 2. **Astro 7 Static Site Generation (SSG):**
-   100% static output (`dist/`). Zero server-side runtime overhead. Build time < 2 seconds.
-3. **Zero React on Public Frontend:**
-   The public website uses pure Astro components, Vanilla TypeScript, and native HTML/CSS. Sanity Studio remains completely decoupled to prevent heavy bundle sizes.
+   100% static output (`dist/`). Zero server-side runtime overhead. Lightning fast builds (< 1.5s).
+3. **Zero CMS Overhead:**
+   Content and photos are tracked directly in code (`src/lib/data.ts`), fully versioned in Git without any third-party CMS downtime, schema migration issues, or API quotas.
 4. **Desktop Sticky Sidebar & Mobile Navigation:**
    Desktop keeps a fixed sidebar with persistent branding, clean navigation, external link to *Darkroom Edits*, and an instant dark/light theme toggle. Mobile uses an accessible slide-out drawer with >= 44px touch targets.
-5. **Sanity CMS as Single Source of Truth:**
-   Portfolio images, gallery memberships, editorial ordering, homepage curation, alt text, and page content are managed through Sanity.
-6. **Bunny.net Hosting vs. Sanity Image CDN:**
-   Bunny Storage hosts only static site code (HTML, CSS, JS, favicons). Portfolio photography is delivered directly from Sanity Image CDN with on-the-fly responsive transformations.
-
----
-
-## 🔒 Image & Master File Policies
-
-### Web-Master Policy
-Sanity is the website presentation CMS, not the raw archival client vault.
-- Upload web-masters with approximately **3000–4000 px** maximum long edge.
-- Never upscale smaller photographs.
-- Preserve original aspect ratios, natural skin tones, and color spaces.
-- Archival print-resolution RAW/TIFF files remain stored in secure offline client archives.
-
-### Casual High-Resolution Download Protection
-- No intrusive fake DRM or right-click blocking.
-- Web-master originals are never exposed directly.
-- The Lightbox viewer requests transformed variants capped at **2200 px** maximum width with quality 85–86.
-- The grid requests responsive thumbnails (480w, 768w, 1024w).
-
-### EXIF Privacy
-- Sensitive private metadata (camera serial numbers, precise GPS coordinates) is stripped from public derivatives by the CDN pipeline.
+5. **Modern Image Presentation:**
+   Responsive srcset loading, native lazy-loading, and an accessible keyboard/touch lightbox viewer with EXIF-respecting presentation.
+6. **Bunny.net Global Edge Delivery:**
+   Static build output is synced directly to Bunny Storage with edge cache invalidation across worldwide PoPs.
 
 ---
 
@@ -81,49 +56,34 @@ aygrossphotography/
 ├── public/
 │   ├── _headers                    # Security & cache control headers
 │   ├── _redirects                  # 301 redirect rules (e.g. /events-photography)
-│   └── favicon.svg                 # Camera aperture SVG icon
+│   ├── favicon.svg                 # Camera aperture SVG icon
+│   ├── apple-touch-icon.png        # Apple iOS icon
+│   ├── logo.png                    # Square brand icon for Schema.org
+│   └── og-image.jpg                # 1200x630 OpenGraph social share card
 ├── reports/
 │   ├── audit-report.json           # Legacy site audit discovery
-│   └── migration-summary.json      # Verification & migration metrics
-├── sanity/
-│   ├── schemaTypes/
-│   │   ├── siteSettings.ts         # Singleton: business metadata, social, contact
-│   │   ├── homePage.ts             # Singleton: curated hero & featured photos
-│   │   ├── photo.ts                # Reusable photograph schema with hotspot & crop
-│   │   ├── gallery.ts              # Ordered gallery schema (Portraits, Events, etc.)
-│   │   ├── aboutPage.ts            # Singleton: biography, portrait, highlights
-│   │   ├── faqPage.ts              # Singleton: ordered Q&A items
-│   │   ├── pricingPage.ts          # Singleton: pricing packages
-│   │   ├── contactPage.ts          # Singleton: Letterbird config & direct contact
-│   │   ├── testimonial.ts          # Testimonials schema
-│   │   ├── seo.ts                  # Reusable SEO metadata
-│   │   └── index.ts
-│   └── deskStructure.ts            # Pinned singleton Studio desk structure
-├── sanity.config.ts                # Sanity Studio configuration
-├── sanity.cli.ts                   # Sanity CLI configuration
+│   └── migration-summary.json      # Verification metrics
 ├── scripts/
 │   ├── audit-existing-site.ts      # Automated crawler of aygrossphotography.com
-│   ├── migrate-wordpress.ts        # Idempotent WP -> Sanity migration tool
-│   ├── verify-migration.ts         # QA script validating photo parity & alt texts
+│   ├── audit-site-qa.ts            # Automated static site QA & SEO/a11y audit suite
 │   ├── bunny-deploy.ts             # Syncs dist/ to Bunny Storage & purges CDN
-│   └── test-endpoints.ts           # Verifies all local HTTP status codes
+│   ├── generate-brand-assets.ts    # Generates OG image, logo, and icons via Sharp
+│   ├── test-endpoints.ts           # Verifies all local HTTP status codes
+│   └── verify-migration.ts         # QA script validating photo parity & alt texts
 ├── src/
 │   ├── components/
 │   │   ├── Lightbox.astro          # Accessible modal viewer (Escape, Arrows, Touch)
 │   │   ├── MobileNav.astro         # Accessible mobile drawer & theme switcher
 │   │   ├── PhotoGrid.astro         # Natural masonry column photo grid
-│   │   ├── SanityImage.astro       # Responsive picture element with auto-format
+│   │   ├── PhotoImage.astro        # High-performance responsive picture element
 │   │   ├── SEO.astro               # OpenGraph, Twitter, & JSON-LD Structured Data
 │   │   └── Sidebar.astro           # Sticky desktop sidebar
 │   ├── layouts/
 │   │   └── Layout.astro            # Base shell with FOUT-free theme boot script
 │   ├── lib/
-│   │   └── sanity/
-│   │       ├── client.ts           # Resilient client with verified offline fallback
-│   │       ├── fixtures.ts         # Audited live data fixtures from existing site
-│   │       ├── image.ts            # URL builder & responsive srcSet generator
-│   │       ├── queries.ts          # Centralized GROQ queries
-│   │       └── types.ts            # TypeScript interfaces
+│   │   ├── data.ts                 # Single source of truth for site content & photos
+│   │   ├── image.ts                # Responsive image utilities & helpers
+│   │   └── types.ts                # TypeScript domain interfaces
 │   ├── pages/
 │   │   ├── 404.astro               # Minimal 404 error page
 │   │   ├── about.astro             # About AY Gross & grandfather mentorship
@@ -157,103 +117,57 @@ aygrossphotography/
 cd aygrossphotography
 
 # Install dependencies
-npm ci
+npm install
 ```
 
-### 3. Environment Variables
-Copy `.env.example` to `.env`:
-```bash
-cp .env.example .env
-```
-
-Configurable variables:
-```ini
-# Public Sanity Configuration
-PUBLIC_SANITY_PROJECT_ID=your_sanity_project_id
-PUBLIC_SANITY_DATASET=production
-PUBLIC_SANITY_API_VERSION=2024-01-01
-
-# Private Sanity Tokens (Optional for build/migration)
-SANITY_API_READ_TOKEN=your_read_token
-SANITY_WRITE_TOKEN=your_migration_write_token
-
-# Bunny.net Deployment Credentials (GitHub Actions Secrets)
-BUNNY_STORAGE_ZONE_NAME=aygross-storage
-BUNNY_STORAGE_API_KEY=your_bunny_storage_password
-BUNNY_STORAGE_REGION=de
-BUNNY_PULL_ZONE_ID=123456
-BUNNY_API_KEY=your_bunny_account_api_key
-```
-
-*Note: If Sanity credentials are not configured, the website automatically and seamlessly runs using verified offline fixtures captured during the legacy site audit.*
-
-### 4. Running the Development Server
+### 3. Running the Development Server
 ```bash
 npm run dev
 ```
 Open `http://localhost:4321` in your browser.
 
-### 5. Running Static Verification & Build
+### 4. Running Static Verification & Build
 ```bash
-# Type check and component diagnostics
-npx astro check
+# Type check and component diagnostics (0 errors, 0 warnings)
+npm run check
 
 # Production static build
 npm run build
 
-# Verify migration parity
-npx tsx scripts/verify-migration.ts
+# Run automated static site QA audit (HTML, SEO, links, schemas, images)
+npm run test:audit
 
-# Test all local endpoints
+# Run complete QA verification suite
+npm test
+
+# Test all local endpoints against preview server
 npx tsx scripts/test-endpoints.ts
 ```
 
 ---
 
-## ✍️ Sanity Studio & Content Management
+## ✍️ Content & Photo Editing
 
-### Launching Sanity Studio Locally
-```bash
-npx sanity dev
-```
-Studio will be available at `http://localhost:3333`.
+All site content and galleries are managed in `src/lib/data.ts`:
 
-### Deploying Sanity Studio
-Deploy Studio to Sanity's global hosting:
-```bash
-npx sanity deploy
-```
-You will be prompted to choose a studio hostname (e.g. `aygrossphotography.sanity.studio`).
-
-### Editorial Workflow
-1. **Photographs:**
-   - Add a new photo under **All Photographs**.
-   - Set internal title and **Alt Text** (mandatory for accessibility).
-   - Adjust **Hotspot & Crop** for responsive framing.
-   - Toggle `Featured` if desired for homepage promotion.
-2. **Galleries:**
-   - Under **Galleries & Collections**, select `Portraits` or `Events`.
-   - Drag and drop photographs into the desired order. Order in Sanity is the exact order rendered in the gallery.
-3. **Homepage:**
-   - In **Pages -> Homepage**, manually select and reorder featured photographs.
-4. **Publishing:**
-   - Click **Publish**. Sanity triggers a webhook to rebuild the static site.
+- **Adding / Reordering Photos**: Edit `portraitPhotos` or `eventPhotos` arrays in `src/lib/data.ts`. Set `featured: true` to include in the homepage hero feed.
+- **Updating Text & Bios**: Update `aboutPage`, `faqPage`, `pricingPage`, `contactPage`, or `siteSettings` objects.
+- **SEO & Meta Descriptions**: Each gallery and page includes optional `seo` blocks for customized page titles and OpenGraph descriptions.
 
 ---
 
 ## 🚀 Bunny.net Deployment & CI/CD
 
 ### Production Architecture
-1. Editor clicks **Publish** in Sanity Studio.
-2. Sanity Webhook triggers GitHub Actions (`repository_dispatch` event `sanity-publish`).
-3. GitHub Actions runs:
+1. Developer pushes commits to `main`.
+2. GitHub Actions runs:
    - `npm ci`
    - `npx astro check` (0 errors)
    - `npx tsx scripts/verify-migration.ts`
    - `npm run build` (outputs to `dist/`)
    - `npx tsx scripts/bunny-deploy.ts`
-4. `bunny-deploy.ts` uploads static assets to Bunny Storage Zone and calls the Bunny API to purge Pull Zone cache.
-5. Global CDN edge nodes update within seconds.
+3. `bunny-deploy.ts` uploads static assets to Bunny Storage Zone and calls the Bunny API to purge Pull Zone cache.
+4. Global CDN edge nodes update within seconds.
 
 ---
 

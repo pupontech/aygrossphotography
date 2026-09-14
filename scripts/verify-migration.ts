@@ -6,7 +6,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fallbackPortraitsGallery, fallbackEventsGallery, fallbackHomePage } from '../src/lib/sanity/fixtures';
+import { portraitsGallery, eventsGallery, homePage } from '../src/lib/data';
 
 function verifyMigration() {
   console.log('🧪 Starting Migration & Content Parity Verification...');
@@ -14,7 +14,7 @@ function verifyMigration() {
   let passed = true;
 
   // 1. Portraits gallery count
-  const portraitsCount = fallbackPortraitsGallery.photos.length;
+  const portraitsCount = portraitsGallery.photos.length;
   console.log(`- Portraits photo count: ${portraitsCount} (Expected: 22)`);
   if (portraitsCount !== 22) {
     console.error('❌ Portraits count mismatch!');
@@ -22,7 +22,7 @@ function verifyMigration() {
   }
 
   // 2. Events gallery count
-  const eventsCount = fallbackEventsGallery.photos.length;
+  const eventsCount = eventsGallery.photos.length;
   console.log(`- Events photo count: ${eventsCount} (Expected: 8)`);
   if (eventsCount !== 8) {
     console.error('❌ Events count mismatch!');
@@ -30,7 +30,7 @@ function verifyMigration() {
   }
 
   // 3. Homepage photos
-  const homeCount = fallbackHomePage.featuredPhotos.length;
+  const homeCount = homePage.featuredPhotos.length;
   console.log(`- Homepage featured photo count: ${homeCount}`);
   if (homeCount < 5) {
     console.error('❌ Homepage featured photos too low!');
@@ -38,7 +38,7 @@ function verifyMigration() {
   }
 
   // 4. Alt text coverage
-  const allPhotos = [...fallbackPortraitsGallery.photos, ...fallbackEventsGallery.photos];
+  const allPhotos = [...portraitsGallery.photos, ...eventsGallery.photos];
   const missingAlt = allPhotos.filter((p) => !p.alt || p.alt.trim().length === 0);
   console.log(`- Photos missing alt text: ${missingAlt.length}`);
   if (missingAlt.length > 0) {
