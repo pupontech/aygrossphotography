@@ -1,0 +1,118 @@
+---
+import type { SanitySiteSettings, SanitySEO } from '../lib/sanity/types';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  image?: string;
+  noIndex?: boolean;
+  type?: 'website' | 'article' | 'profile';
+  schemaType?: 'WebSite' | 'ImageGallery' | 'AboutPage' | 'FAQPage' | 'ContactPage';
+  faqs?: Array<{ question: string; answer: string }>;
+  settings?: SanitySiteSettings | null;
+  pageSeo?: SanitySEO | null;
+}
+
+const {
+  title: customTitle,
+  description: customDescription,
+  canonicalUrl: customCanonical,
+  image: customImage,
+  noIndex: customNoIndex,
+  type = 'website',
+  schemaType = 'WebSite',
+  faqs = [],
+  settings,
+  pageSeo
+} = Astro.props;
+
+const siteUrl = 'https://aygrossphotography.com';
+const businessName = settings?.businessName || 'AY Gross Photography';
+const defaultDescription = settings?.siteDescription || 'Fine art family and event photography in Jerusalem and throughout Israel by AY Gross.';
+
+const finalTitle = customTitle
+  ? `${customTitle} | ${businessName}`
+  : (pageSeo?.metaTitle ? `${pageSeo.metaTitle} | ${businessName}` : `${businessName} | Family & Event Photography`);
+
+const finalDescription = customDescription || pageSeo?.metaDescription || defaultDescription;
+const finalImage = customImage || (pageSeo?.ogImage ? (pageSeo.ogImage as any).asset?.url : `${siteUrl}/og-image.jpg`);
+const canonical = customCanonical ? `${siteUrl}${customCanonical}` : `${siteUrl}${Astro.url.pathname.replace(/\/$/, '') || '/'}`;
+const isNoIndex = customNoIndex ?? pageSeo?.noIndex ?? false;
+
+// Structured data builders
+const baseSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'PhotographyBusiness',
+      '@id': `${siteUrl}/#organization`,
+      name: businessName,
+      url: siteUrl,
+      logo: `${siteUrl}/logo.png`,
+      image: finalImage,
+      description: defaultDescription,
+      email: settings?.email || 'aygrossphotography@gmail.com',
+      telephone: settings?.phone || '+972-58-772-5628',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Kiryat Yearim',
+        addressRegion: 'Jerusalem District',
+        addressCountry: 'IL'
+      },
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Jerusalem' },
+        { '@type': 'Country', name: 'Israel' }
+      ],
+      priceRange: '$$'
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: businessName,
+      publisher: { '@id': `${siteUrl}/#organization` }
+    }
+  ]
+};
+
+// Add FAQPage schema if relevant
+if (schemaType === 'FAQPage' && faqs.length > 0) {
+  (baseSchema['@graph'] as any[]).push({
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
+  });
+}
+---
+
+<!-- Primary Meta Tags -->
+<title>{finalTitle}</title>
+<meta name="title" content={finalTitle} />
+<meta name="description" content={finalDescription} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={isNoIndex ? 'noindex, nofollow' : 'index, follow'} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={finalTitle} />
+<meta property="og:description" content={finalDescription} />
+<meta property="og:image" content={finalImage} />
+<meta property="og:site_name" content={businessName} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonical} />
+<meta name="twitter:title" content={finalTitle} />
+<meta name="twitter:description" content={finalDescription} />
+<meta name="twitter:image" content={finalImage} />
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" is:inline set:html={JSON.stringify(baseSchema)} />

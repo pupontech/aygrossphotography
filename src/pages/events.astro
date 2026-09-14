@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import { getGalleryBySlug, getSiteSettings } from '../lib/sanity/client';
+
+const [gallery, settings] = await Promise.all([
+  getGalleryBySlug('events'),
+  getSiteSettings()
+]);
+
+const photos = gallery?.photos || [];
+const title = gallery?.title || 'Event Photography';
+const intro = gallery?.intro || 'Documenting Bar Mitzvahs, weddings, and family celebrations with authentic emotion and timeless storytelling.';
+---
+
+<Layout
+  title={title}
+  description={intro}
+  canonicalUrl="/events"
+  schemaType="ImageGallery"
+  settings={settings}
+  pageSeo={gallery?.seo}
+>
+  <div class="gallery-page">
+    <header class="page-intro">
+      <h1 class="page-title">{title}</h1>
+      {intro && <p class="page-subtitle">{intro}</p>}
+    </header>
+
+    <section class="gallery-section" aria-label="Event Photography Collection">
+      <PhotoGrid photos={photos} galleryTitle={title} />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .gallery-page {
+    width: 100%;
+  }
+
+  .gallery-section {
+    margin-top: var(--spacing-lg);
+  }
+</style>

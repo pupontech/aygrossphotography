@@ -1,0 +1,27 @@
+# Build output
+dist/
+.astro/
+sanity/dist/
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Migration temporary image cache
+migration-cache/
+temp/

@@ -1,0 +1,3 @@
+# Bunny.net / Static Host Redirect Map
+/events-photography/    /events    301
+/events-photography     /events    301

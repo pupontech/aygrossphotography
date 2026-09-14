@@ -1,0 +1,332 @@
+---
+import type { SanitySiteSettings } from '../lib/sanity/types';
+
+interface Props {
+  currentPath: string;
+  settings?: SanitySiteSettings | null;
+}
+
+const { currentPath, settings } = Astro.props;
+const cleanPath = currentPath.replace(/\/$/, '') || '/';
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Portraits', href: '/portraits' },
+  { label: 'Events', href: '/events' },
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const editingServicesUrl = settings?.editingServicesUrl || 'https://darkroomedits.com/';
+const businessName = settings?.businessName || 'AY Gross Photography';
+const phone = settings?.phone || '058-772-5628';
+const email = settings?.email || 'aygrossphotography@gmail.com';
+---
+
+<div class="mobile-nav-container">
+  <!-- Fixed mobile top bar -->
+  <header class="mobile-header">
+    <a href="/" class="mobile-brand" aria-label="AY Gross Photography - Home">
+      <span class="mobile-brand-name">{businessName}</span>
+    </a>
+
+    <div class="mobile-actions">
+      <!-- Theme toggle button -->
+      <button
+        type="button"
+        class="mobile-theme-btn"
+        id="theme-toggle-mobile"
+        aria-label="Toggle dark and light mode"
+      >
+        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <!-- Hamburger toggle button -->
+      <button
+        type="button"
+        class="hamburger-btn"
+        id="mobile-menu-trigger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile navigation drawer backdrop & overlay -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay" aria-hidden="true">
+    <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
+    <div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Site Navigation">
+      <div class="drawer-header">
+        <span class="drawer-title">Navigation</span>
+        <button
+          type="button"
+          class="drawer-close-btn"
+          id="mobile-menu-close"
+          aria-label="Close navigation menu"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="drawer-nav">
+        <ul class="drawer-list" role="list">
+          {navItems.map((item) => {
+            const isActive = cleanPath === item.href;
+            return (
+              <li class="drawer-item">
+                <a
+                  href={item.href}
+                  class={`drawer-link ${isActive ? 'active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })}
+          <li class="drawer-item">
+            <a
+              href={editingServicesUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="drawer-link external-drawer-link"
+            >
+              Editing Services ↗
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="drawer-footer">
+        <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} class="drawer-contact-link">{phone}</a>
+        <a href={`mailto:${email}`} class="drawer-contact-link">{email}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mobile-nav-container {
+    display: block;
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-nav-container {
+      display: none;
+    }
+  }
+
+  .mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height-mobile);
+    background-color: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.25rem;
+    z-index: 1000;
+    transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
+  }
+
+  .mobile-brand {
+    text-decoration: none;
+  }
+
+  .mobile-brand-name {
+    font-family: var(--font-brand);
+    font-size: 1.15rem;
+    color: var(--text-primary);
+  }
+
+  .mobile-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mobile-theme-btn,
+  .hamburger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    color: var(--text-primary);
+    border-radius: 4px;
+  }
+
+  .mobile-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 240ms ease, visibility 240ms ease;
+  }
+
+  .mobile-drawer-overlay[aria-hidden="false"] {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .mobile-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .mobile-drawer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 85vw);
+    background-color: var(--bg-sidebar);
+    border-left: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.5rem 2rem;
+    transform: translateX(100%);
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-drawer-overlay[aria-hidden="false"] .mobile-drawer {
+    transform: translateX(0);
+  }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .drawer-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .drawer-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    color: var(--text-primary);
+  }
+
+  .drawer-nav {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .drawer-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .drawer-link {
+    display: block;
+    padding: 0.65rem 0;
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    font-family: var(--font-brand);
+  }
+
+  .drawer-link.active {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .external-drawer-link {
+    font-style: italic;
+    color: var(--text-muted);
+  }
+
+  .drawer-footer {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .drawer-contact-link {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  // Mobile drawer interactive logic
+  function initMobileNav() {
+    const trigger = document.getElementById('mobile-menu-trigger');
+    const closeBtn = document.getElementById('mobile-menu-close');
+    const overlay = document.getElementById('mobile-drawer-overlay');
+    const backdrop = document.getElementById('mobile-drawer-backdrop');
+
+    if (!trigger || !overlay) return;
+
+    function openDrawer() {
+      overlay?.setAttribute('aria-hidden', 'false');
+      trigger?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => closeBtn?.focus(), 50);
+    }
+
+    function closeDrawer() {
+      overlay?.setAttribute('aria-hidden', 'true');
+      trigger?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      trigger?.focus();
+    }
+
+    trigger.addEventListener('click', openDrawer);
+    closeBtn?.addEventListener('click', closeDrawer);
+    backdrop?.addEventListener('click', closeDrawer);
+
+    document.addEventListener('keydown', (e) => {
+      if (overlay?.getAttribute('aria-hidden') === 'false' && e.key === 'Escape') {
+        closeDrawer();
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initMobileNav);
+</script>

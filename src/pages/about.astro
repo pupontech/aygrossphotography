@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SanityImage from '../components/SanityImage.astro';
+import { getAboutPage, getSiteSettings } from '../lib/sanity/client';
+
+const [aboutData, settings] = await Promise.all([
+  getAboutPage(),
+  getSiteSettings()
+]);
+
+const title = aboutData.title || 'About AY Gross';
+const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
+  'Photography has been part of my life for as long as I can remember. My artistic journey began under the mentorship of my grandfather, Dr. Jeff Gross—a gifted photographer who taught me that the finest images are never staged, but discovered in authentic, unhurried moments.',
+  'In 2017, my family and I made Aliyah to Israel. The breathtaking light across the Judean hills, the ancient stones of Jerusalem, and the vibrant life of this country immediately became my creative canvas.',
+  'Specializing in family portraits, Bar Mitzvahs, and intimate celebrations, my goal is simple: to make every session feel effortless, joyful, and completely true to who you are. The best photographs happen when kids are free to laugh, explore, and simply be themselves.'
+];
+---
+
+<Layout
+  title={title}
+  description="Learn more about AY Gross, fine art family and event photographer based in Jerusalem, Israel."
+  canonicalUrl="/about"
+  schemaType="AboutPage"
+  settings={settings}
+  pageSeo={aboutData.seo}
+>
+  <div class="about-page">
+    <header class="page-intro">
+      <h1 class="page-title">{title}</h1>
+      <p class="page-subtitle">Capturing genuine family stories across the landscapes of Israel.</p>
+    </header>
+
+    <div class="about-editorial-grid">
+      <!-- Portrait Column -->
+      {aboutData.portrait && (
+        <div class="about-portrait-wrapper">
+          <SanityImage
+            image={aboutData.portrait}
+            alt="AY Gross with camera"
+            loading="eager"
+            fetchpriority="high"
+            sizes="(max-width: 768px) 100vw, 420px"
+            class="about-portrait-img"
+          />
+          <span class="portrait-caption">AY Gross — Jerusalem, Israel</span>
+        </div>
+      )}
+
+      <!-- Bio Column -->
+      <div class="about-content-column">
+        <div class="prose">
+          {bio.map((paragraph: string) => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <span class="highlight-number">2017</span>
+            <span class="highlight-label">Aliyah to Israel</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-number">100+</span>
+            <span class="highlight-label">Families Photographed</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-number">10 Days</span>
+            <span class="highlight-label">Turnaround Time</span>
+          </div>
+        </div>
+
+        <div class="about-cta">
+          <a href="/contact" class="btn-editorial">Let's Connect</a>
+          <a href="/faq" class="btn-secondary">Read FAQ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .about-page {
+    width: 100%;
+  }
+
+  .about-editorial-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+    margin-top: var(--spacing-lg);
+  }
+
+  @media (min-width: 900px) {
+    .about-editorial-grid {
+      grid-template-columns: 400px 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .about-portrait-wrapper {
+    position: relative;
+  }
+
+  :global(.about-portrait-img) {
+    border-radius: 2px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .portrait-caption {
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+  }
+
+  .about-content-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .about-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .highlight-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .highlight-number {
+    font-family: var(--font-brand);
+    font-size: 1.75rem;
+    color: var(--text-primary);
+  }
+
+  .highlight-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 0.25rem;
+  }
+
+  .about-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+</style>

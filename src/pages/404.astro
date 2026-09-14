@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSiteSettings } from '../lib/sanity/client';
+
+const settings = await getSiteSettings();
+---
+
+<Layout
+  title="Page Not Found"
+  description="The page you were looking for could not be found."
+  canonicalUrl="/404"
+  noIndex={true}
+  settings={settings}
+>
+  <div class="error-page-container">
+    <span class="error-code">404</span>
+    <h1 class="error-title">Page Not Found</h1>
+    <p class="error-desc">
+      The photograph or page you were looking for may have moved or no longer exists.
+    </p>
+
+    <div class="error-actions">
+      <a href="/" class="btn-editorial">Return Home</a>
+      <a href="/portraits" class="btn-secondary">Explore Portraits</a>
+      <a href="/contact" class="btn-secondary">Contact AY Gross</a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .error-page-container {
+    max-width: 600px;
+    padding: var(--spacing-2xl) 0;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .error-code {
+    font-family: var(--font-brand);
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .error-title {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .error-desc {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+</style>

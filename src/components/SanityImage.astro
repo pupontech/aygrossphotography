@@ -1,0 +1,68 @@
+---
+import type { SanityImageSource } from '../lib/sanity/types';
+import { urlFor, buildSrcSet } from '../lib/sanity/image';
+
+interface Props {
+  image: SanityImageSource;
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  class?: string;
+  aspectRatio?: number;
+  width?: number;
+  height?: number;
+}
+
+const {
+  image,
+  alt,
+  widths = [480, 768, 1024, 1440, 1920],
+  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+  loading = 'lazy',
+  decoding = 'async',
+  fetchpriority,
+  class: className = '',
+  aspectRatio,
+  width: customWidth,
+  height: customHeight
+} = Astro.props;
+
+if (!image) {
+  return null;
+}
+
+// Compute dimensions from Sanity metadata if available
+const metadata = (image as any)?.asset?.metadata;
+const originalWidth = metadata?.dimensions?.width || customWidth || 1200;
+const originalHeight = metadata?.dimensions?.height || customHeight || (aspectRatio ? Math.round(originalWidth / aspectRatio) : 800);
+
+const srcSet = buildSrcSet(image, widths);
+const defaultSrc = urlFor(image).width(1200).url();
+---
+
+<img
+  src={defaultSrc}
+  srcset={srcSet}
+  sizes={sizes}
+  alt={alt}
+  width={originalWidth}
+  height={originalHeight}
+  loading={loading}
+  decoding={decoding}
+  fetchpriority={fetchpriority}
+  class={`sanity-image ${className}`.trim()}
+/>
+
+<style>
+  .sanity-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background-color: var(--bg-secondary);
+    transition: opacity var(--transition-smooth);
+  }
+</style>

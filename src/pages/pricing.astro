@@ -1,0 +1,193 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getPricingPage, getSiteSettings } from '../lib/sanity/client';
+
+const [pricingData, settings] = await Promise.all([
+  getPricingPage(),
+  getSiteSettings()
+]);
+
+const title = pricingData.heading || 'Investment & Pricing';
+const intro = pricingData.introduction || 'Simple, transparent photography packages designed to preserve your family’s most meaningful moments.';
+const packages = pricingData.packages || [];
+---
+
+<Layout
+  title={title}
+  description={intro}
+  canonicalUrl="/pricing"
+  settings={settings}
+  pageSeo={pricingData.seo}
+>
+  <div class="pricing-page">
+    <header class="page-intro">
+      <h1 class="page-title">{title}</h1>
+      <p class="page-subtitle">{intro}</p>
+    </header>
+
+    <!-- Pricing Cards Grid -->
+    <div class="pricing-grid">
+      {packages.map((pkg) => (
+        <article class="pricing-card">
+          <div class="card-header">
+            <h2 class="package-name">{pkg.name}</h2>
+            {pkg.shortDescription && (
+              <p class="package-desc">{pkg.shortDescription}</p>
+            )}
+            {pkg.priceText && (
+              <div class="price-tag">{pkg.priceText}</div>
+            )}
+          </div>
+
+          <div class="card-body">
+            <ul class="feature-list" role="list">
+              {(pkg.features || []).map((feature: string) => (
+                <li class="feature-item">
+                  <span class="check-bullet" aria-hidden="true">✓</span>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="card-footer">
+            <a href={pkg.ctaDestination || '/contact'} class="btn-editorial package-cta">
+              {pkg.ctaLabel || 'Book This Session'}
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Custom Sessions & Print Notice -->
+    <section class="pricing-notes-section">
+      <h2 class="notes-heading">Custom Sessions & Fine Art Prints</h2>
+      <p class="notes-desc">
+        Need coverage for multi-day events, destination travel outside Jerusalem, or custom handcrafted heirlooms? Bespoke arrangements and museum-grade archival framing are always available upon request.
+      </p>
+      <a href="/contact" class="btn-secondary">Inquire for Custom Quote</a>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .pricing-page {
+    width: 100%;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: var(--spacing-lg);
+  }
+
+  @media (min-width: 900px) {
+    .pricing-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .pricing-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    padding: 2.25rem 1.75rem;
+    transition: border-color var(--transition-smooth), transform var(--transition-smooth);
+  }
+
+  .pricing-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .package-name {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .package-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    min-height: 2.8rem;
+  }
+
+  .price-tag {
+    font-family: var(--font-brand);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .card-body {
+    flex: 1;
+    margin-bottom: 2rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .check-bullet {
+    color: var(--text-primary);
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .card-footer {
+    padding-top: 1rem;
+  }
+
+  .package-cta {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Bottom note */
+  .pricing-notes-section {
+    margin-top: var(--spacing-2xl);
+    padding: 2.5rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .notes-heading {
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .notes-desc {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+  }
+</style>

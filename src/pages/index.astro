@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import { getHomePage, getSiteSettings, getTestimonials } from '../lib/sanity/client';
+
+const [homeData, settings, testimonials] = await Promise.all([
+  getHomePage(),
+  getSiteSettings(),
+  getTestimonials()
+]);
+
+const photos = homeData.featuredPhotos || [];
+const displayedTestimonials = (testimonials || []).slice(0, 3);
+---
+
+<Layout
+  title="Fine Art Family & Event Photography"
+  description={homeData.supportingCopy}
+  canonicalUrl="/"
+  settings={settings}
+  pageSeo={homeData.seo}
+>
+  <div class="homepage-container">
+    <!-- Editorial Introduction -->
+    <header class="page-intro">
+      <h1 class="page-title">{homeData.heading || 'Moments framed with heart and light.'}</h1>
+      {homeData.supportingCopy && (
+        <p class="page-subtitle">{homeData.supportingCopy}</p>
+      )}
+    </header>
+
+    <!-- Photography Grid -->
+    <section class="portfolio-section" aria-label="Featured Photography">
+      <PhotoGrid photos={photos} galleryTitle="Featured Portfolio" />
+    </section>
+
+    <!-- Client Testimonials (Understated Editorial Presentation) -->
+    {displayedTestimonials.length > 0 && (
+      <section class="testimonials-section" aria-label="Client Words">
+        <div class="section-divider"></div>
+        <h2 class="section-eyebrow">Client Reflections</h2>
+        <div class="testimonials-grid">
+          {displayedTestimonials.map((item) => (
+            <blockquote class="testimonial-card">
+              <p class="testimonial-quote">“{item.quote}”</p>
+              <footer class="testimonial-author">— {item.clientName}</footer>
+            </blockquote>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Understated Inquire CTA -->
+    <section class="cta-section" aria-label="Booking Inquiry">
+      <div class="cta-inner">
+        <h2 class="cta-heading">Ready to capture your family's story?</h2>
+        <p class="cta-sub">Sessions are scheduled around golden hour throughout Jerusalem and Israel.</p>
+        <div class="cta-actions">
+          <a href="/contact" class="btn-editorial">Inquire About a Session</a>
+          <a href="/portraits" class="btn-secondary">View Portraits</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .homepage-container {
+    width: 100%;
+  }
+
+  .portfolio-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  /* Testimonials styling */
+  .testimonials-section {
+    margin: var(--spacing-2xl) 0;
+    padding-top: var(--spacing-lg);
+  }
+
+  .section-divider {
+    width: 48px;
+    height: 1px;
+    background-color: var(--border-strong);
+    margin-bottom: 2rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .testimonials-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  .testimonial-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--bg-secondary);
+    padding: 2rem 1.75rem;
+    border-radius: 2px;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .testimonial-quote {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .testimonial-author {
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* Understated CTA */
+  .cta-section {
+    margin: var(--spacing-2xl) 0 var(--spacing-xl);
+    padding: 3.5rem 2rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .cta-inner {
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  .cta-heading {
+    font-size: clamp(1.6rem, 2.5vw, 2.25rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-sub {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+</style>

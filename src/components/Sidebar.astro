@@ -1,0 +1,267 @@
+---
+import type { SanitySiteSettings } from '../lib/sanity/types';
+
+interface Props {
+  currentPath: string;
+  settings?: SanitySiteSettings | null;
+}
+
+const { currentPath, settings } = Astro.props;
+
+// Normalize path for active matching
+const cleanPath = currentPath.replace(/\/$/, '') || '/';
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Portraits', href: '/portraits' },
+  { label: 'Events', href: '/events' },
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const editingServicesUrl = settings?.editingServicesUrl || 'https://darkroomedits.com/';
+const businessName = settings?.businessName || 'AY Gross Photography';
+const locationText = settings?.location || 'Jerusalem & All of Israel';
+---
+
+<aside class="desktop-sidebar" aria-label="Main Navigation">
+  <div class="sidebar-inner">
+    <!-- Brand identity -->
+    <header class="brand-container">
+      <a href="/" class="brand-link" aria-label="AY Gross Photography - Home">
+        <span class="brand-title">{businessName}</span>
+        <span class="brand-subtitle">Fine Art & Family Portfolio</span>
+      </a>
+    </header>
+
+    <!-- Navigation links -->
+    <nav class="sidebar-nav">
+      <ul class="nav-list" role="list">
+        {navItems.map((item) => {
+          const isActive = cleanPath === item.href;
+          return (
+            <li class="nav-item">
+              <a
+                href={item.href}
+                class={`nav-link ${isActive ? 'active' : ''}`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+        <!-- External Editing Services link -->
+        <li class="nav-item">
+          <a
+            href={editingServicesUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nav-link external-link"
+            title="External link to Darkroom Edits"
+          >
+            Editing Services <span class="arrow-glyph" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Sidebar footer with theme switch and direct details -->
+    <footer class="sidebar-footer">
+      <div class="theme-switch-wrapper">
+        <button
+          type="button"
+          class="theme-toggle-btn"
+          id="theme-toggle-desktop"
+          aria-label="Toggle dark and light mode"
+          title="Toggle color theme"
+        >
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <span class="theme-label">Theme</span>
+        </button>
+      </div>
+
+      <div class="contact-brief">
+        <p class="location-text">{locationText}</p>
+        <p class="copyright-text">© {new Date().getFullYear()} {businessName}</p>
+      </div>
+    </footer>
+  </div>
+</aside>
+
+<style>
+  .desktop-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-subtle);
+    z-index: 100;
+    display: none;
+    transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-sidebar {
+      display: block;
+    }
+  }
+
+  .sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2.5rem 2rem 2rem;
+    overflow-y: auto;
+  }
+
+  .brand-container {
+    margin-bottom: 2.75rem;
+  }
+
+  .brand-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+  }
+
+  .brand-title {
+    font-family: var(--font-brand);
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    line-height: 1.2;
+    font-weight: 400;
+  }
+
+  .brand-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+  }
+
+  .nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+    position: relative;
+    transition: color var(--transition-smooth), transform var(--transition-smooth);
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+    transform: translateX(3px);
+  }
+
+  .nav-link.active {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--text-primary);
+  }
+
+  .external-link {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .arrow-glyph {
+    display: inline-block;
+    font-size: 0.85rem;
+    margin-left: 0.3rem;
+    font-style: normal;
+  }
+
+  .sidebar-footer {
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-primary);
+    font-size: 0.85rem;
+    transition: all var(--transition-smooth);
+  }
+
+  .theme-toggle-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+
+  /* Sun/moon icon visibility based on data-theme */
+  :global([data-theme="dark"]) .sun-icon {
+    display: block;
+  }
+  :global([data-theme="dark"]) .moon-icon {
+    display: none;
+  }
+  :global(:not([data-theme="dark"])) .sun-icon {
+    display: none;
+  }
+  :global(:not([data-theme="dark"])) .moon-icon {
+    display: block;
+  }
+
+  .contact-brief {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .location-text {
+    margin-bottom: 0.25rem;
+  }
+</style>

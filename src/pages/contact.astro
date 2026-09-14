@@ -1,0 +1,211 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getContactPage, getSiteSettings } from '../lib/sanity/client';
+
+const [contactData, settings] = await Promise.all([
+  getContactPage(),
+  getSiteSettings()
+]);
+
+const title = contactData.heading || 'Get in Touch';
+const intro = contactData.intro || 'Whether you are planning a family portrait session in Jerusalem or an upcoming celebration, I’d love to hear from you.';
+
+const email = contactData.email || settings?.email || 'aygrossphotography@gmail.com';
+const phone = contactData.phone || settings?.phone || '058-772-5628';
+const whatsapp = contactData.whatsApp || contactData.whatsapp || settings?.whatsApp || settings?.whatsapp || '+972 58-772-5628';
+const whatsappClean = whatsapp.replace(/[^0-9]/g, '');
+const location = contactData.location || settings?.location || 'Kiryat Yearim, Jerusalem & all of Israel';
+const letterbirdUsername = contactData.letterbirdUser || contactData.letterbirdUsername || 'aygrossphotography';
+---
+
+<Layout
+  title={title}
+  description="Contact AY Gross Photography to schedule your family portrait session or event coverage in Jerusalem and throughout Israel."
+  canonicalUrl="/contact"
+  schemaType="ContactPage"
+  settings={settings}
+  pageSeo={contactData.seo}
+>
+  <div class="contact-page">
+    <header class="page-intro">
+      <h1 class="page-title">{title}</h1>
+      <p class="page-subtitle">{intro}</p>
+    </header>
+
+    <div class="contact-layout-grid">
+      <!-- Direct Contact Details -->
+      <aside class="contact-details-column">
+        <h2 class="column-title">Direct Details</h2>
+
+        <div class="contact-cards-stack">
+          <!-- Email -->
+          <div class="contact-info-card">
+            <span class="info-label">Email</span>
+            <a href={`mailto:${email}`} class="info-link">{email}</a>
+          </div>
+
+          <!-- Phone -->
+          <div class="contact-info-card">
+            <span class="info-label">Telephone</span>
+            <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} class="info-link">{phone}</a>
+          </div>
+
+          <!-- WhatsApp (Clean inline link, no floating widget) -->
+          <div class="contact-info-card">
+            <span class="info-label">WhatsApp</span>
+            <a
+              href={`https://wa.me/${whatsappClean}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="info-link"
+            >
+              {whatsapp} ↗
+            </a>
+          </div>
+
+          <!-- Location -->
+          <div class="contact-info-card">
+            <span class="info-label">Base & Coverage</span>
+            <p class="info-text">{location}</p>
+          </div>
+        </div>
+
+        <div class="booking-notice">
+          <h3 class="notice-heading">Availability Notice</h3>
+          <p class="notice-desc">
+            Weekend and holiday season dates book several months in advance. Please reach out early to secure your preferred date and golden hour window.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Letterbird Embed Column -->
+      <section class="contact-form-column" aria-label="Inquiry Message Form">
+        <h2 class="column-title">Send a Message</h2>
+        <div class="letterbird-wrapper">
+          <iframe
+            src={`https://letterbird.co/embed/${letterbirdUsername}`}
+            title="Inquiry contact form via Letterbird"
+            class="letterbird-iframe"
+            loading="lazy"
+          ></iframe>
+          <div class="letterbird-fallback">
+            <p>Prefer standard messaging? You can also <a href={`https://letterbird.co/${letterbirdUsername}`} target="_blank" rel="noopener noreferrer">open the form in a new tab</a> or email directly at <a href={`mailto:${email}`}>{email}</a>.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .contact-page {
+    width: 100%;
+  }
+
+  .contact-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+    margin-top: var(--spacing-lg);
+  }
+
+  @media (min-width: 900px) {
+    .contact-layout-grid {
+      grid-template-columns: 340px 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .column-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .contact-cards-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-info-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .info-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .info-link {
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .info-link:hover {
+    text-decoration: underline;
+  }
+
+  .info-text {
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+
+  .booking-notice {
+    padding: 1.5rem;
+    background-color: var(--bg-secondary);
+    border-left: 2px solid var(--text-primary);
+  }
+
+  .notice-heading {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .notice-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .letterbird-wrapper {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    padding: 1rem;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .letterbird-iframe {
+    width: 100%;
+    min-height: 500px;
+    border: none;
+    background: transparent;
+    flex: 1;
+  }
+
+  .letterbird-fallback {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .letterbird-fallback a {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+</style>
