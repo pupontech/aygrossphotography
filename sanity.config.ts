@@ -15,7 +15,7 @@ const singletonTypes = new Set([
 export default defineConfig({
   name: 'aygrossphotography',
   title: 'AY Gross Photography',
-  projectId: process.env.PUBLIC_SANITY_PROJECT_ID || 'dummy_project_id',
+  projectId: process.env.PUBLIC_SANITY_PROJECT_ID || '8wvwf5ai',
   dataset: process.env.PUBLIC_SANITY_DATASET || 'production',
   plugins: [
     structureTool({ structure })
