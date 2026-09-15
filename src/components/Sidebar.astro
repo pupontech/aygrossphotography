@@ -6,19 +6,15 @@ interface Props {
   settings?: SiteSettings | null;
 }
 
-const { currentPath, settings } = Astro.props;
-
-// Normalize path for active matching
-const cleanPath = currentPath.replace(/\/$/, '') || '/';
+const { settings } = Astro.props;
 
 const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Portraits', href: '/portraits' },
-  { label: 'Events', href: '/events' },
-  { label: 'About', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Pricing', href: '/pricing' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Portraits', href: '/#portraits', target: 'portraits' },
+  { label: 'Events', href: '/#events', target: 'events' },
+  { label: 'About', href: '/#about', target: 'about' },
+  { label: 'Pricing', href: '/#pricing', target: 'pricing' },
+  { label: 'FAQ', href: '/#faq', target: 'faq' },
+  { label: 'Contact', href: '/#contact', target: 'contact' },
 ];
 
 const editingServicesUrl = settings?.editingServicesUrl || 'https://darkroomedits.com/';
@@ -32,7 +28,7 @@ const facebookUrl = settings?.socialLinks?.facebook || 'https://facebook.com/ayg
   <div class="sidebar-inner">
     <!-- Brand identity -->
     <header class="brand-container">
-      <a href="/" class="brand-link" aria-label="AY Gross Photography - Home">
+      <a href="/#hero" class="brand-link" aria-label="AY Gross Photography - Home">
         <span class="brand-title">{businessName}</span>
         <span class="brand-subtitle">Fine Art & Family Portfolio</span>
       </a>
@@ -42,20 +38,17 @@ const facebookUrl = settings?.socialLinks?.facebook || 'https://facebook.com/ayg
     <!-- Navigation links -->
     <nav class="sidebar-nav">
       <ul class="nav-list" role="list">
-        {navItems.map((item) => {
-          const isActive = cleanPath === item.href;
-          return (
-            <li class="nav-item">
-              <a
-                href={item.href}
-                class={`nav-link ${isActive ? 'active' : ''}`}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                <span class="nav-link-text">{item.label}</span>
-              </a>
-            </li>
-          );
-        })}
+        {navItems.map((item, index) => (
+          <li class="nav-item">
+            <a
+              href={item.href}
+              data-nav-target={item.target}
+              class={`nav-link ${index === 0 ? 'active' : ''}`}
+            >
+              <span class="nav-link-text">{item.label}</span>
+            </a>
+          </li>
+        ))}
         <!-- External Editing Services link -->
         <li class="nav-item">
           <a

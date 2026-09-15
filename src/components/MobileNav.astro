@@ -6,17 +6,15 @@ interface Props {
   settings?: SiteSettings | null;
 }
 
-const { currentPath, settings } = Astro.props;
-const cleanPath = currentPath.replace(/\/$/, '') || '/';
+const { settings } = Astro.props;
 
 const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Portraits', href: '/portraits' },
-  { label: 'Events', href: '/events' },
-  { label: 'About', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Pricing', href: '/pricing' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Portraits', href: '/#portraits', target: 'portraits' },
+  { label: 'Events', href: '/#events', target: 'events' },
+  { label: 'About', href: '/#about', target: 'about' },
+  { label: 'Pricing', href: '/#pricing', target: 'pricing' },
+  { label: 'FAQ', href: '/#faq', target: 'faq' },
+  { label: 'Contact', href: '/#contact', target: 'contact' },
 ];
 
 const editingServicesUrl = settings?.editingServicesUrl || 'https://darkroomedits.com/';
@@ -31,7 +29,7 @@ const facebookUrl = settings?.socialLinks?.facebook || 'https://facebook.com/ayg
 <div class="mobile-nav-container">
   <!-- Fixed mobile top bar with frosted glass -->
   <header class="mobile-header">
-    <a href="/" class="mobile-brand" aria-label="AY Gross Photography - Home">
+    <a href="/#hero" class="mobile-brand" aria-label="AY Gross Photography - Home">
       <span class="mobile-brand-name">{businessName}</span>
     </a>
 
@@ -99,20 +97,17 @@ const facebookUrl = settings?.socialLinks?.facebook || 'https://facebook.com/ayg
 
       <nav class="drawer-nav">
         <ul class="drawer-list" role="list">
-          {navItems.map((item) => {
-            const isActive = cleanPath === item.href;
-            return (
-              <li class="drawer-item">
-                <a
-                  href={item.href}
-                  class={`drawer-link ${isActive ? 'active' : ''}`}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
-            );
-          })}
+          {navItems.map((item, index) => (
+            <li class="drawer-item">
+              <a
+                href={item.href}
+                data-nav-target={item.target}
+                class={`drawer-link ${index === 0 ? 'active' : ''}`}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
           <li class="drawer-item">
             <a
               href={editingServicesUrl}

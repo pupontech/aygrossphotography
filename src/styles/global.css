@@ -20,6 +20,12 @@ html {
   transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
 
+/* Ensure smooth section jumps clear the fixed mobile header with breathing room */
+section[id],
+header[id] {
+  scroll-margin-top: calc(var(--header-height-mobile, 64px) + 1.75rem);
+}
+
 body {
   min-height: 100vh;
   font-family: var(--font-sans);

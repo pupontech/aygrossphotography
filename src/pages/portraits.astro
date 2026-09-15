@@ -1,44 +1,20 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import PhotoGrid from '../components/PhotoGrid.astro';
-import { getGalleryBySlug, getSiteSettings } from '../lib/data';
-
-const [gallery, settings] = await Promise.all([
-  getGalleryBySlug('portraits'),
-  getSiteSettings()
-]);
-
-const photos = gallery?.photos || [];
-const title = gallery?.title || 'Family & Portrait Photography';
-const intro = gallery?.intro || 'Intimate, natural family portraits captured across the hills and historic landscapes of Jerusalem and Israel.';
+// Redirect to one-page section /#portraits
 ---
 
-<Layout
-  title={title}
-  description={intro}
-  canonicalUrl="/portraits"
-  schemaType="ImageGallery"
-  settings={settings}
-  pageSeo={gallery?.seo}
->
-  <div class="gallery-page">
-    <header class="page-intro">
-      <h1 class="page-title">{title}</h1>
-      {intro && <p class="page-subtitle">{intro}</p>}
-    </header>
-
-    <section class="gallery-section" aria-label="Portrait Photography Collection">
-      <PhotoGrid photos={photos} galleryTitle={title} />
-    </section>
-  </div>
-</Layout>
-
-<style>
-  .gallery-page {
-    width: 100%;
-  }
-
-  .gallery-section {
-    margin-top: var(--spacing-lg);
-  }
-</style>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting to Portraits | AY Gross Photography</title>
+    <link rel="canonical" href="https://aygrossphotography.com/" />
+    <meta http-equiv="refresh" content="0;url=/#portraits" />
+    <meta name="robots" content="noindex, follow" />
+    <script is:inline>
+      window.location.replace('/#portraits');
+    </script>
+  </head>
+  <body style="font-family: sans-serif; padding: 2rem; text-align: center;">
+    <p>Redirecting to <a href="/#portraits">Portraits & Family Stories</a>...</p>
+  </body>
+</html>
