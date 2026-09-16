@@ -56,7 +56,7 @@ function auditHtmlFile(filePath: string) {
   const html = fs.readFileSync(filePath, 'utf-8');
   stats.pagesChecked++;
 
-  const isRedirectPage = relPath.includes('events-photography') || html.includes('http-equiv="refresh"');
+  const isRedirectPage = relPath.includes('events-photography');
 
   // 1. Title Tag
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
