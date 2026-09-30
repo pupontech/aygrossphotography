@@ -9,16 +9,12 @@ const [aboutData, settings] = await Promise.all([
 ]);
 
 const title = aboutData.title || 'About AY Gross';
-const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
-  'Photography has been part of my life for as long as I can remember. My artistic journey began under the mentorship of my grandfather, Dr. Jeff Gross—a gifted photographer who taught me that the finest images are never staged, but discovered in authentic, unhurried moments.',
-  'In 2017, my family and I made Aliyah to Israel. The breathtaking light across the Judean hills, the ancient stones of Jerusalem, and the vibrant life of this country immediately became my creative canvas.',
-  'Specializing in family portraits, Bar Mitzvahs, and intimate celebrations, my goal is simple: to make every session feel effortless, joyful, and completely true to who you are. The best photographs happen when kids are free to laugh, explore, and simply be themselves.'
-];
+const bio: string[] = aboutData.bioParagraphs || [];
 ---
 
 <Layout
   title={title}
-  description="Learn more about AY Gross, fine art family and event photographer based in Jerusalem, Israel."
+  description="Learn more about AY Gross, family and event photographer based in Jerusalem, Israel."
   canonicalUrl="/about"
   schemaType="AboutPage"
   settings={settings}
@@ -27,7 +23,7 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
   <div class="about-page">
     <header class="page-intro">
       <h1 class="page-title">{title}</h1>
-      <p class="page-subtitle">Capturing genuine family stories across the landscapes of Israel.</p>
+      <p class="page-subtitle">Based in Jerusalem. Available across Israel.</p>
     </header>
 
     <div class="about-editorial-grid">
@@ -51,7 +47,7 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
 
       <!-- Bio Column -->
       <div class="about-content-column">
-        <div class="prose prose--dropcap">
+        <div class="prose">
           {bio.map((paragraph: string) => (
             <p>{paragraph}</p>
           ))}
@@ -84,20 +80,21 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
 <style>
   .about-page {
     width: 100%;
+    margin-bottom: var(--spacing-3xl);
   }
 
   .about-editorial-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 3.5rem;
     align-items: start;
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing-2xl);
   }
 
   @media (min-width: 900px) {
     .about-editorial-grid {
-      grid-template-columns: 400px 1fr;
-      gap: 4rem;
+      grid-template-columns: 420px 1fr;
+      gap: 5rem;
     }
   }
 
@@ -115,28 +112,25 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
   }
 
   :global(.about-portrait-img) {
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-elevated);
-    transition: box-shadow var(--transition-smooth);
-  }
-
-  .about-portrait-wrapper:hover :global(.about-portrait-img) {
-    box-shadow: var(--shadow-hover);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
   }
 
   .portrait-caption {
     display: block;
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-top: 0.85rem;
+    margin-top: 1rem;
   }
 
   .about-content-column {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 3rem;
     opacity: 0;
     animation: fadeSlideUp var(--transition-entrance) 200ms forwards;
   }
@@ -144,8 +138,8 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
   .about-highlights {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    padding: 2rem 0;
+    gap: 2rem;
+    padding: 2.25rem 0;
     border-top: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
   }
@@ -153,32 +147,29 @@ const bio: string[] = aboutData.bio || aboutData.bioParagraphs || [
   .highlight-item {
     display: flex;
     flex-direction: column;
-    transition: transform var(--transition-smooth);
-  }
-
-  .highlight-item:hover {
-    transform: translateY(-2px);
   }
 
   .highlight-number {
     font-family: var(--font-brand);
-    font-size: 1.75rem;
+    font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+    font-weight: 400;
     color: var(--text-primary);
     line-height: 1.1;
   }
 
   .highlight-label {
-    font-size: 0.78rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 0.3rem;
+    letter-spacing: 0.14em;
+    margin-top: 0.5rem;
   }
 
   .about-cta {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.25rem;
     align-items: center;
   }
 </style>

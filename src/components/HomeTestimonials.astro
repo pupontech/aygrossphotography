@@ -1,0 +1,127 @@
+---
+import type { Testimonial } from '../lib/types';
+
+interface Props {
+  testimonials: Testimonial[];
+  eyebrow?: string;
+  title?: string;
+}
+
+const {
+  testimonials = [],
+  eyebrow = 'From Recent Sessions',
+  title = 'What Families Say'
+} = Astro.props;
+
+const displayItems = testimonials.slice(0, 3);
+---
+
+<section class="home-testimonials" aria-label="Client Testimonials">
+  <header class="section-header">
+    <span class="section-eyebrow">{eyebrow}</span>
+    <h2 class="section-title">{title}</h2>
+  </header>
+
+  <div class="testimonials-grid">
+    {displayItems.map((item) => (
+      <blockquote class="testimonial-card">
+        <div class="quote-glyph" aria-hidden="true">“</div>
+        <p class="testimonial-quote">{item.quote}</p>
+        <footer class="testimonial-author">
+          <span class="author-name">— {item.clientName}</span>
+        </footer>
+      </blockquote>
+    ))}
+  </div>
+</section>
+
+<style>
+  .home-testimonials {
+    width: 100%;
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .testimonials-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+  }
+
+  .testimonial-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--bg-secondary);
+    padding: 2.5rem 2rem 2.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    position: relative;
+    transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  }
+
+  .testimonial-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .quote-glyph {
+    font-family: var(--font-serif);
+    font-size: 3.75rem;
+    font-weight: 300;
+    line-height: 0.9;
+    color: var(--accent);
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .testimonial-quote {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    line-height: 1.85;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .testimonial-author {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .author-name {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-card {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>

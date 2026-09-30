@@ -7,8 +7,8 @@ const [pricingData, settings] = await Promise.all([
   getSiteSettings()
 ]);
 
-const title = pricingData.heading || 'Investment & Pricing';
-const intro = pricingData.introduction || "Simple, transparent photography packages designed to preserve your family's most meaningful moments.";
+const title = pricingData.heading || 'Packages & Pricing';
+const intro = pricingData.introduction || "Straightforward packages for families and events.";
 const packages = pricingData.packages || [];
 ---
 
@@ -30,9 +30,9 @@ const packages = pricingData.packages || [];
       {packages.map((pkg, index) => {
         const isFeatured = index === 1 && packages.length >= 3;
         return (
-          <article class={`pricing-card ${isFeatured ? 'pricing-card--featured' : ''}`} style={`animation-delay: ${index * 100 + 100}ms`}>
+          <article class={`pricing-card ${isFeatured ? 'pricing-card--featured' : ''}`}>
             {isFeatured && (
-              <div class="featured-badge">Most Popular</div>
+              <div class="featured-badge">For Most Families</div>
             )}
             <div class="card-header">
               <h2 class="package-name">{pkg.name}</h2>
@@ -71,9 +71,9 @@ const packages = pricingData.packages || [];
 
     <!-- Custom Sessions & Print Notice -->
     <section class="pricing-notes-section">
-      <h2 class="notes-heading">Custom Sessions & Fine Art Prints</h2>
+      <h2 class="notes-heading">Custom Sessions & Prints</h2>
       <p class="notes-desc">
-        Need coverage for multi-day events, destination travel outside Jerusalem, or custom handcrafted heirlooms? Bespoke arrangements and museum-grade archival framing are always available upon request.
+        Need coverage for multi-day events or travel outside Jerusalem? Custom packages and professional print options are always available — just ask.
       </p>
       <a href="/contact" class="btn-secondary">Inquire for Custom Quote</a>
     </section>
@@ -83,19 +83,21 @@ const packages = pricingData.packages || [];
 <style>
   .pricing-page {
     width: 100%;
+    margin-bottom: var(--spacing-3xl);
   }
 
   .pricing-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.75rem;
-    margin-top: var(--spacing-lg);
+    gap: 2rem;
+    margin-top: var(--spacing-2xl);
   }
 
   @media (min-width: 900px) {
     .pricing-grid {
       grid-template-columns: repeat(3, 1fr);
-      align-items: start;
+      align-items: stretch;
+      gap: 2.25rem;
     }
   }
 
@@ -105,13 +107,13 @@ const packages = pricingData.packages || [];
     justify-content: space-between;
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 2.25rem 1.75rem;
+    border-radius: var(--radius-sm);
+    padding: 2.5rem 2rem 2.25rem;
     position: relative;
     opacity: 0;
     transform: translateY(12px);
     animation: fadeSlideUp var(--transition-entrance) forwards;
-    transition: border-color var(--transition-smooth), transform var(--transition-smooth), box-shadow var(--transition-smooth);
+    transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
   }
 
   @keyframes fadeSlideUp {
@@ -123,100 +125,91 @@ const packages = pricingData.packages || [];
 
   .pricing-card:hover {
     border-color: var(--border-strong);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-sm);
   }
 
-  /* Featured card */
+  /* Featured card - subtle distinction without aggressive transforms */
   .pricing-card--featured {
     border-color: var(--accent);
-    border-top-width: 3px;
-  }
-
-  .pricing-card--featured:hover {
-    border-color: var(--accent-hover);
-    box-shadow: var(--shadow-elevated);
-  }
-
-  @media (min-width: 900px) {
-    .pricing-card--featured {
-      transform: translateY(-4px) scale(1.02);
-    }
-
-    .pricing-card--featured:hover {
-      transform: translateY(-6px) scale(1.02);
-    }
   }
 
   .featured-badge {
     position: absolute;
-    top: -1px;
-    right: 1.5rem;
+    top: -12px;
+    left: 2rem;
     background-color: var(--accent);
-    color: #fff;
-    font-size: 0.7rem;
+    color: var(--bg-primary);
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    padding: 0.35rem 0.85rem;
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
   }
 
   .card-header {
-    margin-bottom: 1.75rem;
-    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.75rem;
     border-bottom: 1px solid var(--border-subtle);
   }
 
   .package-name {
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
+    font-family: var(--font-brand);
+    font-size: 1.65rem;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    color: var(--text-primary);
+    margin-bottom: 0.65rem;
+    line-height: 1.2;
   }
 
   .package-desc {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
-    line-height: 1.5;
-    margin-bottom: 1rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
     min-height: 2.8rem;
   }
 
   .price-tag {
     font-family: var(--font-brand);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--accent-text);
+    font-size: 1.85rem;
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: 0.02em;
   }
 
   .card-body {
     flex: 1;
-    margin-bottom: 2rem;
+    margin-bottom: 2.25rem;
   }
 
   .feature-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 0.95rem;
   }
 
   .feature-item {
     display: flex;
     align-items: flex-start;
-    gap: 0.65rem;
-    font-size: 0.92rem;
+    gap: 0.75rem;
+    font-size: 0.88rem;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .check-bullet {
-    color: var(--accent-text);
+    color: var(--accent);
     flex-shrink: 0;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
   .card-footer {
-    padding-top: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-subtle);
   }
 
   .package-cta {
@@ -228,24 +221,29 @@ const packages = pricingData.packages || [];
   /* Bottom note */
   .pricing-notes-section {
     margin-top: var(--spacing-3xl);
-    padding: 3rem 2.5rem;
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, color-mix(in srgb, var(--accent-soft) 50%, var(--bg-secondary)) 100%);
+    padding: 3.5rem 2.5rem;
+    background-color: var(--bg-secondary);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-sm);
     text-align: center;
-    max-width: 800px;
+    max-width: 750px;
     margin-left: auto;
     margin-right: auto;
   }
 
   .notes-heading {
-    font-size: 1.35rem;
-    margin-bottom: 0.75rem;
+    font-family: var(--font-brand);
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+    margin-bottom: 0.85rem;
   }
 
   .notes-desc {
     color: var(--text-secondary);
-    margin-bottom: 1.75rem;
-    line-height: 1.7;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    font-size: 0.95rem;
   }
 </style>

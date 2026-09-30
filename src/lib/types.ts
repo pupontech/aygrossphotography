@@ -54,9 +54,32 @@ export interface SiteSettings {
   footerText: string;
 }
 
+export interface HeroSlide {
+  id: string;
+  photo: Photo;
+  title?: string;
+  subtitle?: string;
+  categoryLabel?: string;
+  gallerySlug?: string;
+  objectPosition?: string;
+}
+
+export interface FeaturedGalleryCard {
+  title: string;
+  slug: string;
+  coverPhoto: Photo;
+  subtitle?: string;
+  photoCount?: number;
+}
+
 export interface HomePageData {
   heading: string;
   supportingCopy?: string;
+  heroDescriptor?: string;
+  heroSlides: HeroSlide[];
+  featuredGalleries?: FeaturedGalleryCard[];
+  introHeading?: string;
+  introText?: string[];
   featuredPhotos: Photo[];
   ctaLabel?: string;
   ctaDestination?: string;

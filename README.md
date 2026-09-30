@@ -72,6 +72,11 @@ aygrossphotography/
 │   └── verify-migration.ts         # QA script validating photo parity & alt texts
 ├── src/
 │   ├── components/
+│   │   ├── FeaturedGalleries.astro # Homepage portfolio cards
+│   │   ├── HomeContact.astro       # Homepage inquiry section
+│   │   ├── HomeHero.astro          # Homepage photography carousel
+│   │   ├── HomeIntro.astro         # Homepage approach section
+│   │   ├── HomeTestimonials.astro  # Homepage testimonials
 │   │   ├── Lightbox.astro          # Accessible modal viewer (Escape, Arrows, Touch)
 │   │   ├── MobileNav.astro         # Accessible mobile drawer & theme switcher
 │   │   ├── PhotoGrid.astro         # Natural masonry column photo grid

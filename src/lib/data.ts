@@ -31,39 +31,69 @@ const photo = (id: string, title: string, filename: string, alt: string, feature
 // ─── Photos ─────────────────────────────────────────────────
 
 export const portraitPhotos: Photo[] = [
-  photo('photo-ayg0704', 'AYG0704', 'AYG0704-scaled.jpg', 'Family portrait outdoors in natural sunlight', true),
-  photo('photo-ayg6788', 'AYG6788', 'AYG6788-scaled.jpg', 'Young boy smiling outdoors', true),
-  photo('photo-ayg7972', 'AYG7972', 'AYG7972-scaled.jpg', 'Siblings posing warmly in nature', true),
-  photo('photo-ayg8503', 'AYG8503', 'AYG8503-scaled.jpg', 'Candid portrait of smiling girl in golden hour', true),
-  photo('photo-ayg9405', 'AYG9405', 'AYG9405-scaled.jpg', 'Children laughing together outdoors', true),
-  photo('photo-mg4278', 'MG_4278', 'MG_4278-scaled.jpg', 'Baby smiling portrait', false),
-  photo('photo-mg4526', 'MG_4526_1', 'MG_4526_1-scaled.jpg', 'Family walking together in park', false),
-  photo('photo-mg5920', 'MG_5920', 'MG_5920-scaled.jpg', 'Boy sitting on grass enjoying nature', false),
-  photo('photo-mg5960', 'MG_5960', 'mg_5960-scaled.jpg', 'Toddler playful candid moment', false),
+  // pattern slot: natural — 3:2 landscape, let CSS be natural
+  photo('photo-ayg8503', 'AYG8503', 'AYG8503-scaled.jpg', 'Girl smiling during outdoor portrait session', true),
+  // pattern slot: natural — 1.41 ratio (slightly taller), natural variety
   photo('photo-mg6397', 'MG_6397', 'MG_6397-scaled.jpg', 'Family group portrait with parents and children', true),
-  photo('photo-export0010', 'Untitled Export 0010', 'Untitled_Export-0010-scaled.jpg', 'Sisters embracing lovingly', true),
-  photo('photo-ayg160705', 'AYG160705_159_1', 'ayg160705-159-1-scaled.jpg', 'Boy joyful expression in outdoor portrait', true),
-  photo('photo-ayg0089', 'AYG0089', 'AYG0089-scaled.jpg', 'Family smiling in scenic Israeli grove', false),
-  photo('photo-ayg0384', 'AYG0384', 'AYG0384-scaled.jpg', 'Brother and sister candid outdoor portrait', false),
+  // pattern slot: tall crop — 3:2 landscape gets cropped to portrait
+  photo('photo-ayg6788', 'AYG6788', 'AYG6788-scaled.jpg', 'Young boy smiling outdoors', true),
+  // pattern slot: natural — 1.32 ratio, natural variety
+  photo('photo-ayg160501', 'AYG160501_57', 'AYG160501_-57-scaled.jpg', 'Mother and children outdoors', true),
+  // pattern slot: sq crop — 0.76 portrait image, square crop works great
+  photo('photo-export0010', 'Untitled Export 0010', 'Untitled_Export-0010-scaled.jpg', 'Sisters hugging', true),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-ayg0704', 'AYG0704', 'AYG0704-scaled.jpg', 'Family portrait outdoors in natural sunlight', true),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-ayg9405', 'AYG9405', 'AYG9405-scaled.jpg', 'Children laughing together outdoors', true),
+  // pattern slot: tall crop — 1.15 ratio (already tallish), cropped taller
+  photo('photo-ayg160621', 'AYG160621_218_1', 'ayg160621-218_1-scaled.jpg', 'Brothers smiling together outdoors', true),
+  // pattern slot: sq crop — 3:2 landscape gets cropped to square
+  photo('photo-ayg7972', 'AYG7972', 'AYG7972-scaled.jpg', 'Siblings outdoors', true),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-mg4278', 'MG_4278', 'MG_4278-scaled.jpg', 'Baby smiling portrait', false),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-mg5920', 'MG_5920', 'MG_5920-scaled.jpg', 'Boy sitting on grass outdoors', false),
+  // pattern slot: natural — 1.17 ratio (taller), natural variety
   photo('photo-ayg160518', 'AYG160518_105', 'AYG160518_-105-scaled.jpg', 'Outdoor child portrait with soft background', false),
-  photo('photo-ayg160525', 'AYG160525_277', 'AYG160525_-277-scaled.jpg', 'Father and child playful portrait', true),
-  photo('photo-ayg160501', 'AYG160501_57', 'AYG160501_-57-scaled.jpg', 'Mother and children tender portrait', true),
-  photo('photo-mg1445', 'MG_1445_Edit', 'MG_1445-Edit-scaled.jpg', 'Boy in white shirt natural portrait', false),
+  // pattern slot: natural — 3:2 landscape
   photo('photo-mg1982', 'MG_1982_Edit', 'MG_1982-Edit-scaled.jpg', 'Family sitting together smiling in Jerusalem park', true),
-  photo('photo-ayg160621', 'AYG160621_218_1', 'ayg160621-218_1-scaled.jpg', 'Brothers smiling together in golden hour', true),
-  photo('photo-ayg9991', 'AYG9991', 'AYG9991-scaled.jpg', 'Young girl gentle portrait outdoors', false),
-  photo('photo-mg1236', 'MG_1236', 'MG_1236-scaled.jpg', 'Family celebrating together in field', false)
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-mg4526', 'MG_4526_1', 'MG_4526_1-scaled.jpg', 'Family walking together in park', false),
+  // pattern slot: tall crop — 1.29 ratio, cropped taller
+  photo('photo-ayg160525', 'AYG160525_277', 'AYG160525_-277-scaled.jpg', 'Father and child', true),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-ayg160705', 'AYG160705_159_1', 'ayg160705-159-1-scaled.jpg', 'Boy smiling in outdoor portrait', true),
+  // pattern slot: sq crop — 3:2 landscape gets cropped to square
+  photo('photo-ayg0089', 'AYG0089', 'AYG0089-scaled.jpg', 'Family portrait in a grove', false),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-mg5960', 'MG_5960', 'mg_5960-scaled.jpg', 'Toddler playing outside', false),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-ayg0384', 'AYG0384', 'AYG0384-scaled.jpg', 'Brother and sister portrait', false),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-mg1445', 'MG_1445_Edit', 'MG_1445-Edit-scaled.jpg', 'Boy in white shirt natural portrait', false),
+  // pattern slot: natural — 3:2 landscape
+  photo('photo-ayg9991', 'AYG9991', 'AYG9991-scaled.jpg', 'Young girl outdoor portrait', false),
+  // pattern slot: natural — 1.48 ratio
+  photo('photo-mg1236', 'MG_1236', 'MG_1236-scaled.jpg', 'Family portrait in an open field', false)
 ];
 
 export const eventPhotos: Photo[] = [
-  photo('photo-mg5400', 'MG_5400', 'MG_5400-scaled.jpg', 'Event guests dancing and celebrating with joy', true),
-  photo('photo-mg9223', 'MG_9223', 'MG_9223-scaled.jpg', 'Bar Mitzvah boy celebrating with family', true),
-  photo('photo-ayg9271', 'AYG9271', 'AYG9271-scaled.jpg', 'Celebration banquet gathering in Jerusalem', true),
-  photo('photo-ayg160626', 'AYG160626_368_1', 'ayg160626-368_1.jpg', 'Simcha celebration moment with joyful guests', true),
-  photo('photo-mg9242', 'MG_9242_Edit', 'MG_9242-Edit-scaled.jpg', 'Bar Mitzvah family formal portrait', true),
-  photo('photo-mg4771', 'MG_4771', 'MG_4771-scaled.jpg', 'Grandparents and children celebrating at simcha', true),
-  photo('photo-y7633', 'Y_7633', 'Y__7633-scaled.jpg', 'Candid laughter at family event', true),
-  photo('photo-ayg9192', 'AYG9192', 'AYG9192-scaled.jpg', 'Joyful celebration moment on the dance floor', true)
+  // slot: natural — 3:2 landscape
+  photo('photo-mg9223', 'MG_9223', 'MG_9223-scaled.jpg', 'Bar Mitzvah boy with family', true),
+  // slot: natural — 3:2 landscape
+  photo('photo-mg5400', 'MG_5400', 'MG_5400-scaled.jpg', 'Guests dancing at an event', true),
+  // slot: tall crop — 3:2 gets cropped portrait
+  photo('photo-y7633', 'Y_7633', 'Y__7633-scaled.jpg', 'Laughing at a family event', true),
+  // slot: natural — 1.34 ratio (naturally taller)
+  photo('photo-mg4771', 'MG_4771', 'MG_4771-scaled.jpg', 'Grandparents and children at a simcha', true),
+  // slot: sq crop — 0.94 ratio (near-square), square crop fits perfectly
+  photo('photo-ayg9271', 'AYG9271', 'AYG9271-scaled.jpg', 'Dinner gathering in Jerusalem', true),
+  // slot: natural — 3:2 landscape
+  photo('photo-ayg160626', 'AYG160626_368_1', 'ayg160626-368_1.jpg', 'Guests celebrating at a simcha', true),
+  // slot: natural — 3:2 landscape
+  photo('photo-ayg9192', 'AYG9192', 'AYG9192-scaled.jpg', 'Dancing at an event', true),
+  // slot: tall crop — 3:2 gets cropped portrait
+  photo('photo-mg9242', 'MG_9242_Edit', 'MG_9242-Edit-scaled.jpg', 'Bar Mitzvah family formal portrait', true)
 ];
 
 // ─── Site Settings ──────────────────────────────────────────
@@ -71,7 +101,7 @@ export const eventPhotos: Photo[] = [
 export const siteSettings: SiteSettings = {
   businessName: 'AY Gross Photography',
   shortName: 'AY Gross',
-  siteDescription: 'Jerusalem & Israel family portrait and event photographer. Natural, candid, joyful photography.',
+  siteDescription: 'Natural, relaxed family and event photography in Jerusalem and across Israel.',
   email: 'aygrossphotography@gmail.com',
   phone: '058-772-5628',
   whatsApp: '+972587725628',
@@ -125,29 +155,98 @@ export const testimonials: Testimonial[] = [
 // ─── Page Data ──────────────────────────────────────────────
 
 export const homePage: HomePageData = {
-  heading: "I'm AY, an Israel-based photographer for family portraits and events.",
-  supportingCopy: "Capturing natural expressions, joyful connections, and spontaneous family moments with timeless simplicity.",
+  heroDescriptor: 'AY Gross Photography · Jerusalem & Israel',
+  heading: 'Family & event photography in Jerusalem.',
+  supportingCopy: 'Relaxed family portraits and honest event photography throughout Jerusalem and Israel.',
+  heroSlides: [
+    {
+      id: 'slide-1',
+      photo: portraitPhotos[0],
+      title: 'Sunset Sessions',
+      subtitle: 'Outdoor family portraits at golden hour',
+      categoryLabel: 'Portraits',
+      gallerySlug: '/portraits',
+      objectPosition: 'center 25%'
+    },
+    {
+      id: 'slide-2',
+      photo: eventPhotos[0],
+      title: 'Events & Simchas',
+      subtitle: 'Real moments from family celebrations',
+      categoryLabel: 'Events',
+      gallerySlug: '/events',
+      objectPosition: 'center 35%'
+    },
+    {
+      id: 'slide-3',
+      photo: portraitPhotos[1],
+      title: 'Family Groups',
+      subtitle: 'Extended family sessions across Israel',
+      categoryLabel: 'Portraits',
+      gallerySlug: '/portraits',
+      objectPosition: 'center 30%'
+    },
+    {
+      id: 'slide-4',
+      photo: portraitPhotos[3],
+      title: 'Kids Being Kids',
+      subtitle: 'Patience with kids, always',
+      categoryLabel: 'Portraits',
+      gallerySlug: '/portraits',
+      objectPosition: 'center 30%'
+    },
+    {
+      id: 'slide-5',
+      photo: eventPhotos[1],
+      title: 'On the Dance Floor',
+      subtitle: 'Real moments from real celebrations',
+      categoryLabel: 'Events',
+      gallerySlug: '/events',
+      objectPosition: 'center 30%'
+    }
+  ],
+  introHeading: 'Natural, candid photography for families and simchas.',
+  introText: [
+    'Based in Jerusalem and serving clients across Israel, I specialize in relaxed family portraits and authentic event photography.',
+    'My focus is on patience, natural light, and keeping sessions comfortable—so your images reflect genuine warmth rather than stiff poses.'
+  ],
+  featuredGalleries: [
+    {
+      title: 'Family & Portraits',
+      slug: '/portraits',
+      coverPhoto: portraitPhotos[0],
+      subtitle: 'Children, parents, and multi-generational outdoor sessions',
+      photoCount: portraitPhotos.length
+    },
+    {
+      title: 'Events & Simchas',
+      slug: '/events',
+      coverPhoto: eventPhotos[0],
+      subtitle: 'Bar & Bat Mitzvahs, Brit Milahs, banquets, and celebrations',
+      photoCount: eventPhotos.length
+    }
+  ],
   featuredPhotos: [
     portraitPhotos[0],
+    portraitPhotos[5],
     portraitPhotos[1],
-    portraitPhotos[2],
-    portraitPhotos[3],
-    portraitPhotos[4],
-    portraitPhotos[9],
-    portraitPhotos[10],
-    portraitPhotos[11],
-    portraitPhotos[15],
-    portraitPhotos[16],
-    portraitPhotos[18],
-    portraitPhotos[19],
     eventPhotos[0],
-    eventPhotos[1]
+    portraitPhotos[3],
+    portraitPhotos[8],
+    portraitPhotos[4],
+    portraitPhotos[7],
+    portraitPhotos[11],
+    eventPhotos[2],
+    portraitPhotos[14],
+    portraitPhotos[2],
+    portraitPhotos[12],
+    portraitPhotos[9]
   ],
   ctaLabel: 'Book a Session',
   ctaDestination: '/contact',
   seo: {
-    metaTitle: 'AY Gross Photography | Jerusalem Family Portraits & Events',
-    metaDescription: "Jerusalem & Israel based photographer for family portraits and events. Candid, natural, and timeless photography."
+    metaTitle: 'AY Gross Photography | Family Portraits & Events in Jerusalem & Israel',
+    metaDescription: 'Jerusalem & Israel photographer specializing in natural family portraits, kids, and events. Timeless photography with fast turnaround.'
   }
 };
 
@@ -208,7 +307,7 @@ export const faqPage: FaqPageData = {
 };
 
 export const pricingPage: PricingPageData = {
-  heading: 'Investment & Pricing',
+  heading: 'Packages & Pricing',
   introduction: 'Straightforward, honest pricing for families living in or visiting Israel. Every session is shot with patience and delivered with fast turnaround.',
   packages: [
     {
@@ -217,7 +316,7 @@ export const pricingPage: PricingPageData = {
       priceText: 'Inquire for current rates',
       features: [
         'Up to 60-minute outdoor session in scenic Jerusalem location',
-        'Endless patience for kids to ensure genuine smiles',
+        'Patient with kids — we take the time they need',
         'Individually edited, high-resolution photographs',
         'Private online gallery with full print release',
         'Fast turnaround within 10 business days'
@@ -232,7 +331,7 @@ export const pricingPage: PricingPageData = {
       features: [
         'Complete multi-generational group portraits',
         'Breakdowns of individual families, grandchildren, grandparents',
-        'Coordinated pacing so everyone stays relaxed and happy',
+        'Scheduled breakdowns by family group so nobody gets tired',
         'Direct print ordering shipped to Israel or the USA',
         'High-resolution digital delivery'
       ],
@@ -244,7 +343,7 @@ export const pricingPage: PricingPageData = {
       shortDescription: 'Bar/Bat Mitzvahs, Brit Milahs, family milestones, and celebrations.',
       priceText: 'Hourly packages available',
       features: [
-        'Candid, unobtrusive storytelling and joyful coverage',
+        'Candid event coverage without getting in the way',
         'Pre-event family portraits included',
         'Fast turnaround so you can share memories promptly',
         'Full resolution downloadable gallery'
@@ -253,7 +352,7 @@ export const pricingPage: PricingPageData = {
       ctaDestination: '/contact'
     }
   ],
-  customNote: 'Fine art prints and custom album design are available for both local Israeli residents and American visitors with home delivery.',
+  customNote: 'Quality prints and album design available for Israeli residents and American visitors with home delivery.',
   seo: {
     metaTitle: 'Pricing & Packages | AY Gross Photography',
     metaDescription: 'Pricing and session details for family portraits and event photography in Jerusalem and Israel.'
@@ -279,7 +378,7 @@ export const portraitsGallery: Gallery = {
   title: 'Portraits',
   slug: 'portraits',
   categoryType: 'portraits',
-  intro: 'A celebration of families, children, and spontaneous joy captured across the landscapes of Jerusalem and Israel.',
+  intro: 'Family and children portraits from sessions across Jerusalem and Israel.',
   coverPhoto: portraitPhotos[0],
   photos: portraitPhotos,
   seo: {
@@ -292,12 +391,12 @@ export const eventsGallery: Gallery = {
   title: 'Events',
   slug: 'events',
   categoryType: 'events',
-  intro: 'Heartfelt, authentic event photography for Bar & Bat Mitzvahs, Brit Milahs, and family celebrations.',
+  intro: 'Bar & Bat Mitzvahs, Brit Milahs, and family celebrations throughout Israel.',
   coverPhoto: eventPhotos[0],
   photos: eventPhotos,
   seo: {
     metaTitle: 'Event Photography | AY Gross Photography Israel',
-    metaDescription: 'Storytelling photography for Bar Mitzvahs, Brit Milahs, and family simchas in Jerusalem and across Israel.'
+    metaDescription: 'Photography for Bar Mitzvahs, Brit Milahs, and family simchas in Jerusalem and across Israel.'
   }
 };
 

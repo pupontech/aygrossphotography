@@ -1,0 +1,247 @@
+---
+interface Props {
+  heading?: string;
+  intro?: string;
+  letterbirdUser?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  responseTime?: string;
+}
+
+const {
+  heading = 'Inquire About a Session',
+  intro = 'Whether you are planning a family portrait session in Jerusalem or an upcoming simcha, send a message below to check dates and availability.',
+  letterbirdUser = 'aygrossphotography',
+  email = 'aygrossphotography@gmail.com',
+  phone = '058-772-5628',
+  location = 'Kiryat Yearim, Jerusalem & all of Israel',
+  responseTime = 'I usually answer questions within 24 hours.'
+} = Astro.props;
+
+const phoneTel = phone.startsWith('+') ? phone.replace(/[^0-9+]/g, '') : `+972${phone.replace(/^0/, '').replace(/[^0-9]/g, '')}`;
+---
+
+<section class="home-contact" id="contact" aria-label="Booking Inquiry & Contact">
+  <div class="contact-grid">
+    <!-- Left: Contact Details -->
+    <div class="contact-info-col">
+
+      <h2 class="contact-heading">{heading}</h2>
+      <p class="contact-intro">{intro}</p>
+
+      <div class="direct-cards">
+        <div class="direct-card">
+          <span class="direct-label">Email</span>
+          <a href={`mailto:${email}`} class="direct-link">{email}</a>
+        </div>
+
+        <div class="direct-card">
+          <span class="direct-label">Telephone</span>
+          <a href={`tel:${phoneTel}`} class="direct-link">{phone}</a>
+        </div>
+
+        <div class="direct-card">
+          <span class="direct-label">Location</span>
+          <p class="direct-text">{location}</p>
+        </div>
+      </div>
+
+      <div class="notice-box">
+        <p class="notice-text">
+          {responseTime} Weekend and holiday dates often book well in advance.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right: Letterbird Form Embed (Lazy loaded) -->
+    <div class="contact-form-col">
+      <div class="letterbird-container">
+        <iframe
+          src={`https://letterbird.co/embed/${letterbirdUser}`}
+          title="Session inquiry form via Letterbird"
+          class="letterbird-frame"
+          loading="lazy"
+        ></iframe>
+
+        <noscript>
+          <div class="noscript-box">
+            <p>
+              To send an inquiry directly, please email <a href={`mailto:${email}`}>{email}</a> or telephone <a href={`tel:${phoneTel}`}>{phone}</a>.
+            </p>
+          </div>
+        </noscript>
+
+        <div class="letterbird-subnote">
+          <p>
+            Having trouble with the form? Open it <a href={`https://letterbird.co/${letterbirdUser}`} target="_blank" rel="noopener noreferrer">directly in Letterbird</a> or email <a href={`mailto:${email}`}>{email}</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-contact {
+    width: 100%;
+    margin-bottom: var(--spacing-3xl);
+    padding-top: var(--spacing-md);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media (min-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 380px 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .contact-info-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-heading {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.25;
+  }
+
+  .contact-intro {
+    font-size: 0.96rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 2.25rem;
+  }
+
+  .direct-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .direct-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 1.15rem 1.35rem;
+    transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  }
+
+  .direct-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .direct-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+  }
+
+  .direct-link {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 400;
+    text-decoration: none;
+    transition: color var(--transition-smooth);
+  }
+
+  .direct-link:hover {
+    color: var(--accent);
+  }
+
+  .direct-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+  }
+
+  .notice-box {
+    padding: 1.25rem 1.35rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    margin-top: auto;
+  }
+
+  .notice-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* Letterbird Embed */
+  .contact-form-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .letterbird-container {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .letterbird-frame {
+    width: 100%;
+    min-height: 500px;
+    border: none;
+    background: transparent;
+    flex: 1;
+    border-radius: var(--radius-sm);
+  }
+
+  .noscript-box {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--accent-soft);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  .noscript-box a {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .letterbird-subnote {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .letterbird-subnote a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color var(--transition-smooth);
+  }
+
+  .letterbird-subnote a:hover {
+    color: var(--text-primary);
+  }
+</style>

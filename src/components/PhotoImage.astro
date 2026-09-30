@@ -36,8 +36,17 @@ if (!image) {
 
 const defaultSrc = getImageUrl(image);
 const srcSet = buildSrcSet(image, widths);
-const originalWidth = customWidth || 1200;
-const originalHeight = customHeight || (aspectRatio ? Math.round(originalWidth / aspectRatio) : 800);
+
+// Only set explicit dimensions when provided — otherwise let the image's
+// natural aspect ratio drive the layout for a true masonry / flow feel.
+const hasExplicitDimensions = customWidth || customHeight || aspectRatio;
+const computedWidth = customWidth || (aspectRatio ? 1200 : undefined);
+const computedHeight = customHeight || (aspectRatio ? Math.round(1200 / aspectRatio) : undefined);
+const styleAttr = aspectRatio
+  ? `aspect-ratio: ${aspectRatio};`
+  : hasExplicitDimensions && computedWidth && computedHeight
+    ? `aspect-ratio: ${computedWidth} / ${computedHeight};`
+    : '';
 ---
 
 <img
@@ -45,12 +54,12 @@ const originalHeight = customHeight || (aspectRatio ? Math.round(originalWidth /
   srcset={srcSet}
   sizes={sizes}
   alt={alt}
-  width={originalWidth}
-  height={originalHeight}
+  width={computedWidth}
+  height={computedHeight}
   loading={loading}
   decoding={decoding}
   fetchpriority={fetchpriority}
-  style={`aspect-ratio: ${aspectRatio ? aspectRatio : `${originalWidth} / ${originalHeight}`};`}
+  style={styleAttr || undefined}
   class={`photo-image ${className}`.trim()}
 />
 

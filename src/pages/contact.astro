@@ -118,20 +118,25 @@ const letterbirdUsername = contactData.letterbirdUser || contactData.letterbirdU
     display: grid;
     grid-template-columns: 1fr;
     gap: 3.5rem;
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-3xl);
   }
 
   @media (min-width: 900px) {
     .contact-layout-grid {
-      grid-template-columns: 360px 1fr;
-      gap: 4rem;
+      grid-template-columns: 380px 1fr;
+      gap: 5rem;
     }
   }
 
   .column-title {
-    font-size: 1.2rem;
+    font-family: var(--font-brand);
+    font-size: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--border-subtle);
   }
 
@@ -162,35 +167,37 @@ const letterbirdUsername = contactData.letterbirdUser || contactData.letterbirdU
   .contact-info-card {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     padding: 1.15rem 1.35rem;
-    border-left: 2px solid transparent;
     transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
   }
 
   .contact-info-card:hover {
-    border-left-color: var(--accent);
-    box-shadow: var(--shadow-soft);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
   }
 
   .info-label {
     display: block;
-    font-size: 0.72rem;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.16em;
     color: var(--text-muted);
-    margin-bottom: 0.3rem;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
   }
 
   .info-link {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--text-primary);
-    font-weight: 500;
+    font-weight: 400;
+    text-decoration: none;
     transition: color var(--transition-smooth);
   }
 
   .info-link:hover {
-    color: var(--accent-text);
+    color: var(--accent);
   }
 
   .info-text {
@@ -203,27 +210,26 @@ const letterbirdUsername = contactData.letterbirdUser || contactData.letterbirdU
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    padding: 1rem 1.25rem;
-    background-color: #075e54;
-    border: 1px solid #128c7e;
-    border-radius: var(--radius-md);
-    color: #fff;
+    padding: 1.15rem 1.35rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
     text-decoration: none;
-    transition: background-color var(--transition-smooth), transform var(--transition-smooth), box-shadow var(--transition-smooth);
+    transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
   }
 
   .whatsapp-card:hover {
-    background-color: #128c7e;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(7, 94, 84, 0.3);
-    color: #fff;
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-primary);
   }
 
   .whatsapp-icon {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    opacity: 0.9;
+    color: #25d366;
   }
 
   .whatsapp-text {
@@ -233,45 +239,52 @@ const letterbirdUsername = contactData.letterbirdUser || contactData.letterbirdU
   }
 
   .whatsapp-label {
-    font-size: 0.7rem;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.7;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+    font-weight: 500;
   }
 
   .whatsapp-number {
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 400;
+    color: var(--text-primary);
   }
 
   .whatsapp-arrow {
-    font-size: 1.1rem;
-    opacity: 0.6;
-    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+    font-size: 1rem;
+    color: var(--text-muted);
+    transition: color var(--transition-smooth), transform var(--transition-smooth);
   }
 
   .whatsapp-card:hover .whatsapp-arrow {
-    opacity: 1;
+    color: var(--text-primary);
     transform: translateX(3px);
   }
 
   /* Booking notice */
   .booking-notice {
-    padding: 1.5rem;
+    padding: 1.35rem;
     background-color: var(--bg-secondary);
-    border-left: 2px solid var(--accent);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
   }
 
   .notice-heading {
-    font-size: 1rem;
+    font-family: var(--font-brand);
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
     margin-bottom: 0.4rem;
   }
 
   .notice-desc {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.65;
   }
 
   /* Letterbird embed */

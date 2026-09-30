@@ -10,6 +10,15 @@ interface Props {
 }
 
 const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
+
+/**
+ * Deterministic crop-variation pattern.
+ * Cycles through a sequence to give every Nth card a different
+ * aspect ratio, creating visual variety in the masonry flow
+ * even when most source images share the same shape.
+ * '' = natural (no crop), 'tall' = portrait crop, 'sq' = square crop
+ */
+const variationPattern = ['', '', 'tall', '', 'sq', '', '', 'tall', 'sq', '', '', ''];
 ---
 
 <div class="photo-grid-container" data-gallery-title={galleryTitle}>
@@ -18,6 +27,8 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
       const largeSrc = getLightboxImageUrl(photo.image, 2200);
       const altText = photo.alt || photo.internalTitle || `Photograph ${index + 1}`;
       const captionText = photo.caption || '';
+      const variation = variationPattern[index % variationPattern.length];
+      const wrapperClass = `photo-wrapper${variation ? ` crop-${variation}` : ''}`;
 
       return (
         <button
@@ -30,7 +41,7 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
           aria-label={`View photo ${index + 1}: ${altText}`}
           style={`animation-delay: ${Math.min(index * 60, 600)}ms`}
         >
-          <div class="photo-wrapper">
+          <div class={wrapperClass}>
             <PhotoImage
               image={photo.image}
               alt={altText}
@@ -39,7 +50,7 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
               sizes="(max-width: 640px) 100vw, (max-width: 1023px) 50vw, (max-width: 1440px) 33vw, 25vw"
               class="photo-img"
             />
-            <!-- Hover overlay with caption -->
+            {/* Hover overlay with caption */}
             {captionText && (
               <div class="photo-overlay" aria-hidden="true">
                 <span class="photo-overlay-caption">{captionText}</span>
@@ -57,30 +68,49 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
     width: 100%;
   }
 
-  /* Responsive CSS Column Masonry to preserve natural photo aspect ratios */
+  /* Responsive CSS Column Masonry — organic, flowing layout */
   .photo-masonry {
     column-count: 1;
     column-gap: 1rem;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 540px) {
     .photo-masonry {
       column-count: 2;
       column-gap: 1.25rem;
     }
   }
 
-  @media (min-width: 1100px) {
+  @media (min-width: 1024px) {
     .photo-masonry {
       column-count: 3;
-      column-gap: 1.25rem;
+      column-gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1600px) {
+    .photo-masonry {
+      column-count: 4;
+      column-gap: 1.5rem;
+    }
+  }
+
+  @media (min-width: 540px) {
+    .photo-card {
+      margin-bottom: 1.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .photo-card {
+      margin-bottom: 1.5rem;
     }
   }
 
   /* Staggered reveal animation */
   .photo-card {
     break-inside: avoid;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
     width: 100%;
     padding: 0;
     border: none;
@@ -94,7 +124,7 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
     opacity: 0;
     transform: translateY(16px);
     animation: cardReveal var(--transition-entrance) forwards;
-    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+    transition: opacity var(--transition-smooth), box-shadow var(--transition-smooth);
   }
 
   @keyframes cardReveal {
@@ -112,12 +142,26 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
     transition: box-shadow var(--transition-smooth);
   }
 
-  .photo-card:hover .photo-wrapper {
-    box-shadow: var(--shadow-card);
+  /* Crop variations — create masonry variety from uniform source images.
+     The wrapper constrains the aspect ratio; the image fills via object-fit. */
+  .crop-tall {
+    aspect-ratio: 3 / 4;
   }
 
-  .photo-card:hover {
-    transform: translateY(-3px);
+  .crop-sq {
+    aspect-ratio: 1 / 1;
+  }
+
+  .crop-tall :global(.photo-img),
+  .crop-sq :global(.photo-img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%; /* bias toward faces / upper portion */
+  }
+
+  .photo-card:hover .photo-wrapper {
+    box-shadow: var(--shadow-sm);
   }
 
   .photo-card:focus-visible {
@@ -129,11 +173,12 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
     display: block;
     width: 100%;
     height: auto;
-    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1), opacity var(--transition-smooth);
   }
 
   .photo-card:hover :global(.photo-img) {
-    transform: scale(1.03);
+    transform: scale(1.015);
+    opacity: 0.96;
   }
 
   /* Hover overlay */
@@ -142,23 +187,22 @@ const { photos = [], galleryTitle = 'Gallery' } = Astro.props;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 2rem 1rem 1rem;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
+    padding: 2.5rem 1.25rem 1.25rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
     opacity: 0;
-    transform: translateY(4px);
-    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+    transition: opacity var(--transition-smooth);
     pointer-events: none;
   }
 
   .photo-card:hover .photo-overlay {
     opacity: 1;
-    transform: translateY(0);
   }
 
   .photo-overlay-caption {
-    font-size: 0.82rem;
-    color: #fcfbf9;
-    letter-spacing: 0.02em;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: #ffffff;
+    letter-spacing: 0.04em;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   }
 </style>

@@ -1,208 +1,79 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PhotoGrid from '../components/PhotoGrid.astro';
-import { getHomePage, getSiteSettings, getTestimonials } from '../lib/data';
+import HomeHero from '../components/HomeHero.astro';
+import HomeIntro from '../components/HomeIntro.astro';
+import FeaturedGalleries from '../components/FeaturedGalleries.astro';
+import HomeTestimonials from '../components/HomeTestimonials.astro';
+import HomeContact from '../components/HomeContact.astro';
+import { getHomePage, getSiteSettings, getTestimonials, getContactPage } from '../lib/data';
 
-const [homeData, settings, testimonials] = await Promise.all([
+const [homeData, settings, testimonials, contactData] = await Promise.all([
   getHomePage(),
   getSiteSettings(),
-  getTestimonials()
+  getTestimonials(),
+  getContactPage()
 ]);
 
-const photos = homeData.featuredPhotos || [];
-const displayedTestimonials = (testimonials || []).slice(0, 3);
+const pageTitle = 'Family Portraits & Events';
+const pageDescription = homeData.seo?.metaDescription || homeData.supportingCopy;
 ---
 
 <Layout
-  title="Fine Art Family & Event Photography"
-  description={homeData.supportingCopy}
+  title={pageTitle}
+  description={pageDescription}
   canonicalUrl="/"
+  schemaType="WebSite"
   settings={settings}
   pageSeo={homeData.seo}
 >
   <div class="homepage-container">
-    <!-- Editorial Introduction -->
-    <header class="page-intro hero-intro">
-      <h1 class="page-title hero-title">{homeData.heading || 'Moments framed with heart and light.'}</h1>
-      {homeData.supportingCopy && (
-        <p class="page-subtitle hero-subtitle">{homeData.supportingCopy}</p>
-      )}
-    </header>
+    <!-- 1. Hero Photography Slider (Full Width, Auto-Advancing) -->
+    <HomeHero
+      slides={homeData.heroSlides}
+      descriptor={homeData.heroDescriptor}
+    />
 
-    <!-- Photography Grid -->
-    <section class="portfolio-section" aria-label="Featured Photography">
-      <PhotoGrid photos={photos} galleryTitle="Featured Portfolio" />
-    </section>
+    <!-- 2. Centered Orientation / The Approach -->
+    <HomeIntro
+      heading={homeData.introHeading}
+      paragraphs={homeData.introText}
+      ctaLabel="Explore All Portfolios"
+      ctaDestination="/portraits"
+    />
 
-    <!-- Client Testimonials (Understated Editorial Presentation) -->
-    {displayedTestimonials.length > 0 && (
-      <section class="testimonials-section" aria-label="Client Words">
-        <div class="section-divider"></div>
-        <h2 class="section-eyebrow">Client Reflections</h2>
-        <div class="testimonials-grid">
-          {displayedTestimonials.map((item, index) => (
-            <blockquote class="testimonial-card" style={`animation-delay: ${index * 100 + 100}ms`}>
-              <div class="quote-glyph" aria-hidden="true">"</div>
-              <p class="testimonial-quote">{item.quote}</p>
-              <footer class="testimonial-author">— {item.clientName}</footer>
-            </blockquote>
-          ))}
-        </div>
-      </section>
+    <!-- 3. Featured portfolios -->
+    {homeData.featuredGalleries && homeData.featuredGalleries.length > 0 && (
+      <FeaturedGalleries
+        galleries={homeData.featuredGalleries}
+        eyebrow="Portfolios"
+        title="Featured Galleries"
+      />
     )}
 
-    <!-- Understated Inquire CTA -->
-    <section class="cta-section" aria-label="Booking Inquiry">
-      <div class="cta-inner">
-        <h2 class="cta-heading">Ready to capture your family's story?</h2>
-        <p class="cta-sub">Sessions are scheduled around golden hour throughout Jerusalem and Israel.</p>
-        <div class="cta-actions">
-          <a href="/contact" class="btn-editorial">Inquire About a Session</a>
-          <a href="/portraits" class="btn-secondary">View Portraits</a>
-        </div>
-      </div>
-    </section>
+    <!-- 4. Testimonials -->
+    {testimonials && testimonials.length > 0 && (
+      <HomeTestimonials
+        testimonials={testimonials}
+        eyebrow="From Recent Sessions"
+        title="What Families Say"
+      />
+    )}
+
+    <!-- 5. Contact & Booking Inquiry (Letterbird) -->
+    <HomeContact
+      heading="Inquire About a Session"
+      intro={contactData.intro}
+      letterbirdUser={contactData.letterbirdUser || 'aygrossphotography'}
+      email={contactData.email || settings?.email}
+      phone={contactData.phone || settings?.phone}
+      location={contactData.location || settings?.location}
+      responseTime={contactData.responseTime}
+    />
   </div>
 </Layout>
 
 <style>
   .homepage-container {
     width: 100%;
-  }
-
-  /* Hero intro animation */
-  .hero-intro {
-    animation: heroEnter 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  @keyframes heroEnter {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hero-title {
-    letter-spacing: -0.02em;
-  }
-
-  .hero-subtitle {
-    max-width: 600px;
-  }
-
-  .portfolio-section {
-    margin-bottom: var(--spacing-2xl);
-  }
-
-  /* Testimonials styling */
-  .testimonials-section {
-    margin: var(--spacing-3xl) 0 var(--spacing-2xl);
-    padding-top: var(--spacing-lg);
-  }
-
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  @media (min-width: 768px) {
-    .testimonials-grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.75rem;
-    }
-  }
-
-  .testimonial-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--bg-secondary);
-    padding: 2rem 1.75rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-    position: relative;
-    opacity: 0;
-    transform: translateY(12px);
-    animation: fadeSlideUp var(--transition-entrance) forwards;
-    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
-  }
-
-  @keyframes fadeSlideUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .testimonial-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-card);
-    border-color: var(--border-strong);
-  }
-
-  .quote-glyph {
-    font-family: var(--font-serif);
-    font-size: 3.5rem;
-    line-height: 1;
-    color: var(--accent);
-    opacity: 0.4;
-    margin-bottom: -0.5rem;
-    user-select: none;
-  }
-
-  .testimonial-quote {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    line-height: 1.65;
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-    font-style: italic;
-  }
-
-  .testimonial-author {
-    font-size: 0.82rem;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-
-  /* Warm gradient CTA */
-  .cta-section {
-    margin: var(--spacing-3xl) 0 var(--spacing-xl);
-    padding: 4rem 2.5rem;
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, color-mix(in srgb, var(--accent-soft) 60%, var(--bg-secondary)) 100%);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    text-align: center;
-  }
-
-  .cta-inner {
-    max-width: 620px;
-    margin: 0 auto;
-  }
-
-  .cta-heading {
-    font-size: clamp(1.6rem, 2.5vw, 2.25rem);
-    margin-bottom: 0.75rem;
-  }
-
-  .cta-sub {
-    font-size: 1.05rem;
-    color: var(--text-secondary);
-    margin-bottom: 2rem;
-  }
-
-  .cta-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
   }
 </style>

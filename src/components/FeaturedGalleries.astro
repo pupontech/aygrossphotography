@@ -1,0 +1,226 @@
+---
+import type { FeaturedGalleryCard } from '../lib/types';
+import { getImageUrl, buildSrcSet } from '../lib/image';
+
+interface Props {
+  galleries: FeaturedGalleryCard[];
+  eyebrow?: string;
+  title?: string;
+}
+
+const {
+  galleries = [],
+  eyebrow = 'Portfolios',
+  title = 'Featured Galleries'
+} = Astro.props;
+---
+
+<section class="featured-galleries" id="featured-galleries" aria-label="Featured Photography Portfolios">
+  <header class="section-header">
+    <span class="section-eyebrow">{eyebrow}</span>
+    <h2 class="section-title">{title}</h2>
+  </header>
+
+  <div class="galleries-grid">
+    {galleries.map((gallery) => {
+      const cover = gallery.coverPhoto;
+      const src = getImageUrl(cover.image);
+      const srcset = buildSrcSet(cover.image);
+      const altText = cover.alt || `${gallery.title} photography collection`;
+
+      return (
+        <a href={gallery.slug} class="gallery-card" aria-label={`Explore ${gallery.title} gallery`}>
+          <div class="card-media">
+            <img
+              src={src}
+              srcset={srcset}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 650px"
+              alt={altText}
+              loading="lazy"
+              decoding="async"
+              width={800}
+              height={533}
+              class="card-img"
+            />
+            <div class="card-scrim" aria-hidden="true"></div>
+          </div>
+
+          <div class="card-content">
+            <div class="card-meta">
+              {gallery.photoCount && (
+                <span class="card-count">{gallery.photoCount} Photographs</span>
+              )}
+              <h3 class="card-title">{gallery.title}</h3>
+              {gallery.subtitle && (
+                <p class="card-desc">{gallery.subtitle}</p>
+              )}
+            </div>
+
+            <div class="card-action">
+              <span class="action-text">View Gallery</span>
+              <span class="action-arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .featured-galleries {
+    width: 100%;
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+
+  .galleries-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .galleries-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 2.5rem;
+    }
+  }
+
+  .gallery-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  }
+
+  .gallery-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .gallery-card:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
+  }
+
+  .card-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--bg-elevated);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1), opacity var(--transition-smooth);
+  }
+
+  .gallery-card:hover .card-img {
+    transform: scale(1.02);
+    opacity: 0.96;
+  }
+
+  .card-scrim {
+    display: none;
+  }
+
+  .card-content {
+    padding: 1.75rem 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    gap: 1.25rem;
+    background-color: var(--bg-secondary);
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .card-count {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .card-title {
+    font-family: var(--font-brand);
+    font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    color: var(--text-primary);
+    line-height: 1.25;
+    transition: color var(--transition-smooth);
+  }
+
+  .gallery-card:hover .card-title {
+    color: var(--accent);
+  }
+
+  .card-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-top: 0.25rem;
+  }
+
+  .card-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
+    transition: color var(--transition-smooth), gap var(--transition-smooth);
+  }
+
+  .action-arrow {
+    transition: transform var(--transition-smooth);
+  }
+
+  .gallery-card:hover .card-action {
+    color: var(--text-primary);
+  }
+
+  .gallery-card:hover .action-arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-img,
+    .gallery-card,
+    .action-arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>

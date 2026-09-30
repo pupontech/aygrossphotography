@@ -2,15 +2,16 @@
  * Automated Local Endpoints Test
  */
 
+// Astro is configured with trailingSlash: 'never'; test canonical route URLs.
 const urls = [
   'http://127.0.0.1:4321/',
-  'http://127.0.0.1:4321/portraits/',
-  'http://127.0.0.1:4321/events/',
-  'http://127.0.0.1:4321/events-photography/',
-  'http://127.0.0.1:4321/about/',
-  'http://127.0.0.1:4321/faq/',
-  'http://127.0.0.1:4321/pricing/',
-  'http://127.0.0.1:4321/contact/',
+  'http://127.0.0.1:4321/portraits',
+  'http://127.0.0.1:4321/events',
+  'http://127.0.0.1:4321/events-photography',
+  'http://127.0.0.1:4321/about',
+  'http://127.0.0.1:4321/faq',
+  'http://127.0.0.1:4321/pricing',
+  'http://127.0.0.1:4321/contact',
   'http://127.0.0.1:4321/404.html',
   'http://127.0.0.1:4321/robots.txt'
 ];
